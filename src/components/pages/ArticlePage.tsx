@@ -247,7 +247,7 @@ export function ArticlePage({ article }: { article: Article }) {
 
       <section className="border-t border-border bg-secondary/40 py-14">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading title="More from Pressroom" />
+          <SectionHeading title="More from the show" />
           <div className="grid gap-6 md:grid-cols-3">
             {fallbackRelated.map((a) => (
               <ArticleCard key={a.id} article={a} />

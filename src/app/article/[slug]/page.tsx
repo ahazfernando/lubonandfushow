@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/pages/ArticlePage";
-import { brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages } from "@/lib/brand";
 import { articleBySlug, published } from "@/lib/mock-data";
 
 type Props = {
@@ -17,10 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = articleBySlug(slug);
   if (!article) {
-    return { title: "Story unavailable — Pressroom", robots: { index: false } };
+    return { title: `Story unavailable — ${brand.name}`, robots: { index: false } };
   }
   return {
-    title: `${article.metaTitle ?? article.title} — Pressroom`,
+    title: `${article.metaTitle ?? article.title} — ${brand.name}`,
     description: article.metaDescription ?? article.excerpt,
     openGraph: {
       title: article.title,
