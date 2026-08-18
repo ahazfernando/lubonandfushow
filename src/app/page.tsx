@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 import { HomePage } from "@/components/pages/HomePage";
-import { brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Pressroom — Independent News, Features and Commissioned Writing",
+  title: `${brand.name} — Independent News, Features and Commissioned Writing`,
   description:
-    "Investigations, features and market analysis from the Pressroom newsroom — plus commissioned articles written to order.",
+    `Investigations, features and market analysis from ${brand.name} — plus commissioned articles written to order.`,
   openGraph: {
-    title: "Pressroom — Independent Daily",
+    title: `${brand.name} — Independent Daily`,
     description: "Investigations, features and market analysis you can read or commission.",
     images: brandOpenGraphImages,
   },
