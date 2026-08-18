@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { OrderPage } from "@/components/pages/OrderPage";
-import { brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "Order an Article — Commission the Desk",
