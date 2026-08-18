@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CategoryPage } from "@/components/pages/CategoryPage";
-import { brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages } from "@/lib/brand";
 import { byCategory, categories } from "@/lib/mock-data";
 
 type Props = {
@@ -17,10 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { cat } = byCategory(slug);
   if (!cat) {
-    return { title: "Section — Pressroom", robots: { index: false } };
+    return { title: `Section — ${brand.name}`, robots: { index: false } };
   }
-  const title = `${cat.name} News & Features — Pressroom`;
-  const description = `Latest ${cat.name.toLowerCase()} reporting, analysis and features from the Pressroom newsroom.`;
+  const title = `${cat.name} News & Features — ${brand.name}`;
+  const description = `Latest ${cat.name.toLowerCase()} reporting, analysis and features from ${brand.name}.`;
   return {
     title,
     description,
