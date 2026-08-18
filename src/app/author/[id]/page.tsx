@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { AuthorPage } from "@/components/pages/AuthorPage";
-import { brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages } from "@/lib/brand";
 import { authors, published } from "@/lib/mock-data";
 
 type Props = {
@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const author = authors.find((item) => item.id === id);
   if (!author) {
-    return { title: "Author — Pressroom", robots: { index: false } };
+    return { title: `Author — ${brand.name}`, robots: { index: false } };
   }
-  const title = `${author.name} — Pressroom`;
+  const title = `${author.name} — ${brand.name}`;
   return {
     title,
     description: author.bio,
