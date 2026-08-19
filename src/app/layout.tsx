@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
-import { brand, brandOpenGraphImages } from "@/lib/brand";
+import { brand, brandOpenGraphImages, siteUrl } from "@/lib/brand";
 
 import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
     default: "Pressroom — Independent Daily",
     template: "%s",
@@ -16,17 +17,18 @@ export const metadata: Metadata = {
     "Independent reporting, features and commissioned writing from the Pressroom newsroom.",
   authors: [{ name: "Pressroom" }],
   icons: {
-    icon: [{ url: brand.logo, type: "image/png" }],
-    apple: brand.logo,
-    shortcut: brand.logo,
+    icon: [{ url: brand.logo, type: "image/png", sizes: "797x372" }],
+    apple: [{ url: brand.logo, type: "image/png" }],
+    shortcut: [{ url: brand.logo, type: "image/png" }],
   },
   openGraph: {
     type: "website",
+    siteName: brand.name,
     images: brandOpenGraphImages,
   },
   twitter: {
     card: "summary_large_image",
-    images: [brand.logo],
+    images: brandOpenGraphImages,
   },
 };
 
