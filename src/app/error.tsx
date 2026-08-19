@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 
-import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { useI18n } from "@/components/site/LanguageProvider";
 
 export default function Error({
@@ -15,7 +14,7 @@ export default function Error({
   const { t } = useI18n();
 
   useEffect(() => {
-    reportLovableError(error, { boundary: "next_root_error_component" });
+    console.error(error);
   }, [error]);
 
   return (
