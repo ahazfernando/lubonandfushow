@@ -4,6 +4,7 @@ import { BarChart3, Check, Eye, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { ArticleEditor } from "@/components/site/ArticleEditor";
+import { CouponManager } from "@/components/site/CouponManager";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +54,7 @@ export function AdminPage() {
 
         <Tabs defaultValue="editor">
           <div className="mx-auto max-w-7xl px-4">
-            <TabsList className="flex h-auto w-full rounded-sm">
+            <TabsList className="flex h-auto w-full flex-wrap rounded-sm">
               <TabsTrigger value="editor" className="flex-1 rounded-sm">
                 {t.admin.editor}
               </TabsTrigger>
@@ -71,6 +72,9 @@ export function AdminPage() {
               </TabsTrigger>
               <TabsTrigger value="users" className="flex-1 rounded-sm">
                 {t.admin.users}
+              </TabsTrigger>
+              <TabsTrigger value="coupons" className="flex-1 rounded-sm">
+                {t.admin.coupons}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -312,6 +316,10 @@ export function AdminPage() {
                 </table>
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="coupons" className="mt-8">
+            <CouponManager />
           </TabsContent>
         </Tabs>
       </div>

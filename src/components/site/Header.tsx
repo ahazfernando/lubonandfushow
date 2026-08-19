@@ -21,6 +21,7 @@ export function Header() {
 
   const nav = [
     { label: t.nav.home, to: "/" },
+    { label: t.nav.coupons, to: "/coupons" },
     { label: t.nav.order, to: "/order" },
     { label: t.nav.search, to: "/search" },
     { label: t.nav.newsroom, to: "/admin" },

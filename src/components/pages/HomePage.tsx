@@ -5,6 +5,7 @@ import { Eye, Flame, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { ArticleCard, ArticleRow, CategoryTag } from "@/components/site/ArticleCard";
+import { CouponCard } from "@/components/site/CouponCard";
 import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,9 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { useI18n } from "@/components/site/LanguageProvider";
+import { fetchCoupons } from "@/lib/coupon-api";
 import { authorById, categories, published, readingTime, type Article } from "@/lib/mock-data";
+import { useQuery } from "@tanstack/react-query";
 
 export function HomePage() {
   const [tab, setTab] = useState("All");
@@ -34,6 +37,11 @@ export function HomePage() {
     (a) => a.featured && !used.has(a.id) && !mostRead.some((m) => m.id === a.id),
   );
   const tabs = ["All", ...categories.slice(0, 4).map((c) => c.name)];
+  const { data: coupons = [] } = useQuery({
+    queryKey: ["coupons"],
+    queryFn: () => fetchCoupons(false),
+  });
+  const featuredCoupons = coupons.filter((c) => c.featured).slice(0, 3);
 
   return (
     <SiteLayout>
@@ -157,6 +165,25 @@ export function HomePage() {
                 <ArticleCard key={a.id} article={a} />
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {featuredCoupons.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-14">
+          <SectionHeading
+            title={t.home.couponsTitle}
+            action={
+              <Link href="/coupons" className="text-sm font-semibold text-primary">
+                {t.home.viewAllCoupons} →
+              </Link>
+            }
+          />
+          <p className="-mt-4 mb-6 text-primary kicker">{t.home.couponsKicker}</p>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredCoupons.map((coupon) => (
+              <CouponCard key={coupon.id} coupon={coupon} />
+            ))}
           </div>
         </section>
       )}
