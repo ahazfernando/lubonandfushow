@@ -1,16 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import { Clock, Eye, MessageSquare } from "lucide-react";
 
-import { authorById, formatDate, readingTime, type Article } from "@/lib/mock-data";
+import { useI18n } from "./LanguageProvider";
+import { authorById, readingTime, type Article } from "@/lib/mock-data";
 
 export function CategoryTag({ name }: { name: string }) {
+  const { categoryName } = useI18n();
   return (
-    <span className="bg-primary px-2 py-1 text-primary-foreground kicker">{name}</span>
+    <span className="bg-primary px-2 py-1 text-primary-foreground kicker">
+      {categoryName(name)}
+    </span>
   );
 }
 
 export function ArticleCard({ article, size = "md" }: { article: Article; size?: "sm" | "md" }) {
   const author = authorById(article.authorId);
+  const { formatDate, formatNumber, msg, t } = useI18n();
   return (
     <article className="card-press card-press-hover overflow-hidden">
       <Link href={`/article/${article.slug}`} className="block">
@@ -39,10 +46,10 @@ export function ArticleCard({ article, size = "md" }: { article: Article; size?:
             {author.name}
           </Link>
           <span className="flex items-center gap-1">
-            <Clock className="size-3" /> {readingTime(article.content)} min
+            <Clock className="size-3" /> {msg(t.common.min, { n: readingTime(article.content) })}
           </span>
           <span className="flex items-center gap-1">
-            <Eye className="size-3" /> {article.views.toLocaleString()}
+            <Eye className="size-3" /> {formatNumber(article.views)}
           </span>
           <span className="flex items-center gap-1">
             <MessageSquare className="size-3" /> {article.comments}
@@ -54,6 +61,7 @@ export function ArticleCard({ article, size = "md" }: { article: Article; size?:
 }
 
 export function ArticleRow({ article }: { article: Article }) {
+  const { formatDate, categoryName } = useI18n();
   return (
     <article className="flex gap-4 border-b border-border pb-4 last:border-0">
       <Link href={`/article/${article.slug}`} className="shrink-0">
@@ -68,7 +76,7 @@ export function ArticleRow({ article }: { article: Article }) {
       </Link>
       <div className="space-y-1.5">
         <div className="flex items-center gap-2">
-          <span className="text-primary kicker">{article.category}</span>
+          <span className="text-primary kicker">{categoryName(article.category)}</span>
           <span className="text-xs text-muted-foreground">{formatDate(article.publishedAt)}</span>
         </div>
         <h3 className="text-sm leading-snug">

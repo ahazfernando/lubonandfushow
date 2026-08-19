@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { articles, formatDate } from "@/lib/mock-data";
+import { articles } from "@/lib/mock-data";
+import { useI18n } from "@/components/site/LanguageProvider";
 
 const mine = articles.filter((a) => a.authorId === "a2");
 
@@ -24,6 +25,13 @@ const feedback = [
 ];
 
 export function WriterPage() {
+  const { t, formatDate, categoryName, locale, msg } = useI18n();
+  const caseClass = locale === "si" ? "" : "uppercase";
+  const statusTitle = {
+    draft: t.writer.drafts,
+    pending_review: t.writer.submitted,
+    published: t.writer.published,
+  } as const;
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden">
@@ -35,51 +43,55 @@ export function WriterPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/15" />
         <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">
-          <p className="text-primary kicker">Contributor</p>
-          <h1 className="mt-2 max-w-4xl text-3xl text-white sm:text-4xl md:text-5xl">Writer dashboard</h1>
+          <p className="text-primary kicker">{t.writer.kicker}</p>
+          <h1 className="mt-2 max-w-4xl text-3xl text-white sm:text-4xl md:text-5xl">
+            {t.writer.title}
+          </h1>
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-10">
         <Tabs defaultValue="work">
           <TabsList className="flex-wrap rounded-sm">
-            <TabsTrigger value="work" className="rounded-sm">My work</TabsTrigger>
-            <TabsTrigger value="write" className="rounded-sm">New draft</TabsTrigger>
-            <TabsTrigger value="feedback" className="rounded-sm">Editor feedback</TabsTrigger>
-            <TabsTrigger value="apply" className="rounded-sm">Apply</TabsTrigger>
+            <TabsTrigger value="work" className="rounded-sm">
+              {t.writer.myWork}
+            </TabsTrigger>
+            <TabsTrigger value="write" className="rounded-sm">
+              {t.writer.newDraft}
+            </TabsTrigger>
+            <TabsTrigger value="feedback" className="rounded-sm">
+              {t.writer.editorFeedback}
+            </TabsTrigger>
+            <TabsTrigger value="apply" className="rounded-sm">
+              {t.writer.apply}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="work" className="mt-8 space-y-8">
             {(["draft", "pending_review", "published"] as const).map((status) => (
               <div key={status}>
-                <SectionHeading
-                  title={
-                    status === "draft"
-                      ? "Drafts"
-                      : status === "pending_review"
-                        ? "Submitted"
-                        : "Published"
-                  }
-                />
+                <SectionHeading title={statusTitle[status]} />
                 <div className="space-y-3">
-                  {mine.filter((a) => a.status === status).map((a) => (
-                    <div
-                      key={a.id}
-                      className="card-press flex flex-wrap items-center justify-between gap-3 p-4"
-                    >
-                      <div>
-                        <p className="font-semibold">{a.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {a.category} · {formatDate(a.publishedAt)}
-                        </p>
+                  {mine
+                    .filter((a) => a.status === status)
+                    .map((a) => (
+                      <div
+                        key={a.id}
+                        className="card-press flex flex-wrap items-center justify-between gap-3 p-4"
+                      >
+                        <div>
+                          <p className="font-semibold">{a.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {categoryName(a.category)} · {formatDate(a.publishedAt)}
+                          </p>
+                        </div>
+                        <Button variant="outline" size="sm" className="rounded-sm">
+                          {t.writer.openEditor}
+                        </Button>
                       </div>
-                      <Button variant="outline" size="sm" className="rounded-sm">
-                        Open in editor
-                      </Button>
-                    </div>
-                  ))}
+                    ))}
                   {mine.filter((a) => a.status === status).length === 0 && (
-                    <p className="text-sm text-muted-foreground">Nothing here yet.</p>
+                    <p className="text-sm text-muted-foreground">{t.writer.nothingHere}</p>
                   )}
                 </div>
               </div>
@@ -89,18 +101,22 @@ export function WriterPage() {
           <TabsContent value="write" className="mt-8">
             <p className="mb-6 flex items-center gap-2 border-l-4 border-primary bg-primary/5 p-3 text-sm">
               <AlertCircle className="size-4 text-primary" />
-              Your submissions go to <strong>pending review</strong> — an editor publishes them.
+              {t.writer.pendingNote}
             </p>
             <ArticleEditor mode="writer" />
           </TabsContent>
 
           <TabsContent value="feedback" className="mt-8 space-y-4">
-            <SectionHeading title="Editorial notes" />
+            <SectionHeading title={t.writer.editorialNotes} />
             {feedback.map((f) => (
               <div key={f.title} className="card-press p-6">
-                <span className="bg-primary px-2 py-1 text-primary-foreground kicker">{f.status}</span>
+                <span className="bg-primary px-2 py-1 text-primary-foreground kicker">
+                  {t.writer.revisionRequested}
+                </span>
                 <h3 className="mt-3 text-lg">{f.title}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">From {f.editor}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {msg(t.common.from, { name: f.editor })}
+                </p>
                 <p className="mt-3 font-serif text-sm text-muted-foreground">{f.note}</p>
               </div>
             ))}
@@ -108,28 +124,45 @@ export function WriterPage() {
 
           <TabsContent value="apply" className="mt-8">
             <div className="card-press max-w-2xl p-6 md:p-8">
-              <SectionHeading title="Become a contributor" />
+              <SectionHeading title={t.writer.become} />
               <form
                 className="space-y-4"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  toast.success("Application submitted for editorial approval");
+                  toast.success(t.writer.appSubmitted);
                 }}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="niche">Topic niche</Label>
-                  <Input id="niche" maxLength={100} placeholder="Energy policy, city budgets…" className="rounded-sm" />
+                  <Label htmlFor="niche">{t.writer.niche}</Label>
+                  <Input
+                    id="niche"
+                    maxLength={100}
+                    placeholder={t.writer.nichePlaceholder}
+                    className="rounded-sm"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="portfolio">Portfolio links</Label>
-                  <Textarea id="portfolio" rows={3} maxLength={500} placeholder="One URL per line" className="rounded-sm" />
+                  <Label htmlFor="portfolio">{t.writer.portfolio}</Label>
+                  <Textarea
+                    id="portfolio"
+                    rows={3}
+                    maxLength={500}
+                    placeholder={t.writer.portfolioPlaceholder}
+                    className="rounded-sm"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="sample">Writing sample</Label>
-                  <Textarea id="sample" rows={7} maxLength={3000} placeholder="Paste 300–500 words" className="rounded-sm" />
+                  <Label htmlFor="sample">{t.writer.sample}</Label>
+                  <Textarea
+                    id="sample"
+                    rows={7}
+                    maxLength={3000}
+                    placeholder={t.writer.samplePlaceholder}
+                    className="rounded-sm"
+                  />
                 </div>
-                <Button type="submit" className="rounded-sm font-semibold uppercase">
-                  Submit application
+                <Button type="submit" className={`rounded-sm font-semibold ${caseClass}`}>
+                  {t.writer.submitApp}
                 </Button>
               </form>
             </div>

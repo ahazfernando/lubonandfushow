@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Bold,
-  ImagePlus,
-  Italic,
-  List,
-  ListOrdered,
-  Quote,
-  Save,
-} from "lucide-react";
+import { Bold, ImagePlus, Italic, List, ListOrdered, Quote, Save } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,27 +17,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { categories, readingTime } from "@/lib/mock-data";
-
-
-const starter = `## The opening section
-
-Type your story here, then select any text and pick a style from the toolbar — headings, **bold**, lists and quotes render live in the preview beside you.
-
-- Drop an image anywhere in the panel to attach a featured image
-- Slug and meta fields drive the page's SEO tags
-
-> Pull quotes look like this.`;
+import { useI18n } from "./LanguageProvider";
 
 type BlockStyle = "p" | "h2" | "h3" | "quote" | "bullet" | "numbered";
-
-const blockLabels: { value: BlockStyle; label: string }[] = [
-  { value: "p", label: "Paragraph" },
-  { value: "h2", label: "Heading 1" },
-  { value: "h3", label: "Heading 2" },
-  { value: "quote", label: "Quote" },
-  { value: "bullet", label: "Bulleted list" },
-  { value: "numbered", label: "Numbered list" },
-];
 
 function stripPrefix(line: string) {
   return line.replace(/^\s*(#{1,6}\s+|>\s?|[-*]\s+|\d+\.\s+)/, "");
@@ -79,15 +53,32 @@ function applyBlock(text: string, start: number, end: number, style: BlockStyle)
 }
 
 export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
+  const { t, msg, categoryName, locale } = useI18n();
+  const caseClass = locale === "si" ? "" : "uppercase";
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState(starter);
+  const [content, setContent] = useState(t.editor.starter);
   const [slug, setSlug] = useState("");
   const [dragging, setDragging] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [blockStyle, setBlockStyle] = useState<BlockStyle>("p");
 
-  function withSelection(fn: (text: string, start: number, end: number) => { next: string; selStart?: number; selEnd: number }) {
+  const blockLabels: { value: BlockStyle; label: string }[] = [
+    { value: "p", label: t.editor.paragraph },
+    { value: "h2", label: t.editor.heading1 },
+    { value: "h3", label: t.editor.heading2 },
+    { value: "quote", label: t.editor.quote },
+    { value: "bullet", label: t.editor.bullet },
+    { value: "numbered", label: t.editor.numbered },
+  ];
+
+  function withSelection(
+    fn: (
+      text: string,
+      start: number,
+      end: number,
+    ) => { next: string; selStart?: number; selEnd: number },
+  ) {
     const el = bodyRef.current;
     if (!el) return;
     const { selectionStart, selectionEnd, value } = el;
@@ -106,12 +97,15 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
 
   function wrap(marker: string) {
     withSelection((text, start, end) => {
-      const selected = text.slice(start, end) || "text";
+      const selected = text.slice(start, end) || t.editor.wrapFallback;
       const next = `${text.slice(0, start)}${marker}${selected}${marker}${text.slice(end)}`;
-      return { next, selStart: start + marker.length, selEnd: start + marker.length + selected.length };
+      return {
+        next,
+        selStart: start + marker.length,
+        selEnd: start + marker.length + selected.length,
+      };
     });
   }
-
 
   function handleTitle(v: string) {
     setTitle(v);
@@ -129,24 +123,24 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
     const file = files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast.error("Only image files can be attached");
+      toast.error(t.editor.onlyImages);
       return;
     }
     setImage(URL.createObjectURL(file));
-    toast.success("Featured image attached — thumbnail generated");
+    toast.success(t.editor.imageAttached);
   }
 
   return (
     <div className="space-y-6">
       <div className="card-press space-y-4 p-5">
         <div className="space-y-2">
-          <Label htmlFor="title">Headline</Label>
+          <Label htmlFor="title">{t.editor.headline}</Label>
           <Input
             id="title"
             value={title}
             onChange={(e) => handleTitle(e.target.value)}
             maxLength={140}
-            placeholder="Write the headline"
+            placeholder={t.editor.headlinePlaceholder}
             className="rounded-sm"
           />
         </div>
@@ -167,16 +161,16 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
           }`}
         >
           {image ? (
-            <img src={image} alt="Featured preview" className="h-32 w-full object-cover" />
+            <img src={image} alt={t.editor.featuredPreview} className="h-32 w-full object-cover" />
           ) : (
             <>
               <ImagePlus className="size-5 text-primary" />
-              <p className="font-semibold">Drag & drop a featured image</p>
-              <p className="text-xs text-muted-foreground">JPG or PNG · thumbnails auto-generated</p>
+              <p className="font-semibold">{t.editor.dropImage}</p>
+              <p className="text-xs text-muted-foreground">{t.editor.dropHint}</p>
             </>
           )}
           <label className="cursor-pointer text-xs font-semibold text-primary">
-            or browse files
+            {t.editor.browse}
             <input
               type="file"
               accept="image/*"
@@ -187,7 +181,7 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="body">Body</Label>
+          <Label htmlFor="body">{t.editor.body}</Label>
           <div className="flex flex-wrap items-center gap-2 border border-border bg-muted/40 p-2">
             <Select value={blockStyle} onValueChange={(v) => setBlock(v as BlockStyle)}>
               <SelectTrigger className="h-9 w-[170px] rounded-sm bg-background text-xs font-semibold uppercase">
@@ -203,11 +197,11 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
             </Select>
             <div className="flex items-center gap-1">
               {[
-                { icon: Bold, title: "Bold", run: () => wrap("**") },
-                { icon: Italic, title: "Italic", run: () => wrap("*") },
-                { icon: List, title: "Bulleted list", run: () => setBlock("bullet") },
-                { icon: ListOrdered, title: "Numbered list", run: () => setBlock("numbered") },
-                { icon: Quote, title: "Quote", run: () => setBlock("quote") },
+                { icon: Bold, title: t.editor.bold, run: () => wrap("**") },
+                { icon: Italic, title: t.editor.italic, run: () => wrap("*") },
+                { icon: List, title: t.editor.bullet, run: () => setBlock("bullet") },
+                { icon: ListOrdered, title: t.editor.numbered, run: () => setBlock("numbered") },
+                { icon: Quote, title: t.editor.quote, run: () => setBlock("quote") },
               ].map(({ icon: Icon, title, run }) => (
                 <Button
                   key={title}
@@ -223,9 +217,7 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
                 </Button>
               ))}
             </div>
-            <p className="ml-auto text-xs text-muted-foreground">
-              Select text, then pick a style
-            </p>
+            <p className="ml-auto text-xs text-muted-foreground">{t.editor.selectStyle}</p>
           </div>
           <Textarea
             id="body"
@@ -237,13 +229,16 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
           />
 
           <p className="text-xs text-muted-foreground">
-            {content.split(/\s+/).filter(Boolean).length} words · {readingTime(content)} min read
+            {msg(t.common.wordsRead, {
+              words: content.split(/\s+/).filter(Boolean).length,
+              n: readingTime(content),
+            })}
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-2">
-            <Label>Section</Label>
+            <Label>{t.editor.section}</Label>
             <Select defaultValue={categories[0]!.name}>
               <SelectTrigger className="rounded-sm">
                 <SelectValue />
@@ -251,27 +246,32 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
               <SelectContent>
                 {categories.map((c) => (
                   <SelectItem key={c.id} value={c.name}>
-                    {c.name}
+                    {categoryName(c.name)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tags">Tags</Label>
+            <Label htmlFor="tags">{t.editor.tags}</Label>
             <Input id="tags" placeholder="policy, markets" className="rounded-sm" />
           </div>
           <div className="space-y-2 lg:col-span-2">
-            <Label htmlFor="slug">Slug</Label>
-            <Input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} className="rounded-sm" />
+            <Label htmlFor="slug">{t.editor.slug}</Label>
+            <Input
+              id="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              className="rounded-sm"
+            />
           </div>
           <div className="space-y-2 lg:col-span-2">
-            <Label htmlFor="meta">Meta description</Label>
+            <Label htmlFor="meta">{t.editor.meta}</Label>
             <Textarea id="meta" maxLength={160} rows={2} className="rounded-sm" />
           </div>
           {mode === "admin" && (
             <div className="space-y-2 lg:col-span-2">
-              <Label htmlFor="schedule">Schedule publication</Label>
+              <Label htmlFor="schedule">{t.editor.schedule}</Label>
               <Input id="schedule" type="datetime-local" className="rounded-sm" />
             </div>
           )}
@@ -280,44 +280,44 @@ export function ArticleEditor({ mode }: { mode: "admin" | "writer" }) {
         <div className="flex flex-wrap gap-2 border-t border-border pt-4">
           <Button
             variant="outline"
-            className="rounded-sm font-semibold uppercase"
-            onClick={() => toast.success("Draft saved")}
+            className={`rounded-sm font-semibold ${caseClass}`}
+            onClick={() => toast.success(t.editor.draftSaved)}
           >
-            <Save className="size-4" /> Save draft
+            <Save className="size-4" /> {t.editor.saveDraft}
           </Button>
           {mode === "admin" ? (
             <>
               <Button
                 variant="outline"
-                className="rounded-sm font-semibold uppercase"
-                onClick={() => toast.success("Scheduled")}
+                className={`rounded-sm font-semibold ${caseClass}`}
+                onClick={() => toast.success(t.editor.scheduled)}
               >
-                Schedule
+                {t.editor.scheduleBtn}
               </Button>
               <Button
-                className="rounded-sm font-semibold uppercase"
-                onClick={() => toast.success("Published")}
+                className={`rounded-sm font-semibold ${caseClass}`}
+                onClick={() => toast.success(t.editor.published)}
               >
-                Publish now
+                {t.editor.publishNow}
               </Button>
             </>
           ) : (
             <Button
-              className="rounded-sm font-semibold uppercase"
-              onClick={() => toast.success("Submitted for editorial review")}
+              className={`rounded-sm font-semibold ${caseClass}`}
+              onClick={() => toast.success(t.editor.submitted)}
             >
-              Submit for review
+              {t.editor.submitReview}
             </Button>
           )}
         </div>
       </div>
 
       <div className="card-press p-5">
-        <p className="mb-4 text-primary kicker">Live preview</p>
+        <p className="mb-4 text-primary kicker">{t.editor.livePreview}</p>
         {image && <img src={image} alt="" className="mb-5 h-64 w-full object-cover" />}
-        <h1 className="text-2xl md:text-4xl">{title || "Your headline will appear here"}</h1>
+        <h1 className="text-2xl md:text-4xl">{title || t.editor.headlineFallback}</h1>
         <p className="mt-2 text-xs text-muted-foreground">
-          /article/{slug || "your-slug"} · {readingTime(content)} min read
+          /article/{slug || "your-slug"} · {msg(t.common.minRead, { n: readingTime(content) })}
         </p>
         <div className="mt-5">
           <Markdown source={content} />

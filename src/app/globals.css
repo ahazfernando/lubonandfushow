@@ -13,9 +13,9 @@
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 6px);
-  --font-display: "Archivo Black", "Arial Black", sans-serif;
-  --font-sans: "Barlow", system-ui, sans-serif;
-  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-display: "Archivo Black", "Noto Sans Sinhala", "Arial Black", sans-serif;
+  --font-sans: "Barlow", "Noto Sans Sinhala", system-ui, sans-serif;
+  --font-serif: "Source Serif 4", "Noto Serif Sinhala", Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -143,6 +143,26 @@
     font-family: var(--font-display);
     letter-spacing: -0.015em;
     line-height: 1.05;
+  }
+
+  html[lang="si"] {
+    --font-display: "Noto Sans Sinhala", "Archivo Black", sans-serif;
+    --font-sans: "Noto Sans Sinhala", "Barlow", system-ui, sans-serif;
+    --font-serif: "Noto Serif Sinhala", "Source Serif 4", Georgia, serif;
+  }
+
+  html[lang="si"] h1,
+  html[lang="si"] h2,
+  html[lang="si"] h3,
+  html[lang="si"] h4 {
+    letter-spacing: 0;
+    line-height: 1.3;
+    font-weight: 800;
+  }
+
+  html[lang="si"] .kicker {
+    text-transform: none;
+    letter-spacing: 0.04em;
   }
 }
 

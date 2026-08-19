@@ -10,34 +10,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-
-const roles = [
-  { id: "reader", label: "I want to read", icon: User, note: "Instant access" },
-  { id: "writer", label: "I want to write for you", icon: PenLine, note: "Needs approval" },
-  { id: "client", label: "I want to order content", icon: ShoppingBag, note: "Needs approval" },
-];
+import { useI18n } from "@/components/site/LanguageProvider";
 
 export function AuthPage() {
   const [role, setRole] = useState("reader");
   const [step, setStep] = useState<"account" | "profile">("account");
+  const { t, msg, locale } = useI18n();
+  const caseClass = locale === "si" ? "" : "uppercase";
+
+  const roles = [
+    { id: "reader", label: t.auth.roleReader, icon: User, note: t.auth.noteInstant },
+    { id: "writer", label: t.auth.roleWriter, icon: PenLine, note: t.auth.noteApproval },
+    { id: "client", label: t.auth.roleClient, icon: ShoppingBag, note: t.auth.noteApproval },
+  ];
+
+  const features = [t.auth.feat1, t.auth.feat2, t.auth.feat3, t.auth.feat4];
 
   return (
     <SiteLayout>
       <section className="mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-2">
         <div>
-          <p className="text-primary kicker">Membership</p>
-          <h1 className="mt-3 text-4xl md:text-5xl">Join the Pressroom.</h1>
-          <p className="mt-4 max-w-md font-serif text-muted-foreground">
-            Readers get a reading list and the daily brief. Writers get commissions. Clients get a
-            newsroom on retainer.
-          </p>
+          <p className="text-primary kicker">{t.auth.kicker}</p>
+          <h1 className="mt-3 text-4xl md:text-5xl">{t.auth.title}</h1>
+          <p className="mt-4 max-w-md font-serif text-muted-foreground">{t.auth.body}</p>
           <ul className="mt-8 space-y-4 text-sm">
-            {[
-              "Email verification and magic-link sign-in",
-              "Google and GitHub single sign-on",
-              "Role-based access: reader, writer, client, admin",
-              "Profile step with avatar, bio and social links",
-            ].map((f) => (
+            {features.map((f) => (
               <li key={f} className="flex gap-3">
                 <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
                 {f}
@@ -51,16 +48,16 @@ export function AuthPage() {
             <Tabs defaultValue="signup">
               <TabsList className="w-full rounded-sm">
                 <TabsTrigger value="signup" className="flex-1 rounded-sm">
-                  Create account
+                  {t.auth.createAccount}
                 </TabsTrigger>
                 <TabsTrigger value="signin" className="flex-1 rounded-sm">
-                  Sign in
+                  {t.auth.signIn}
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="signup" className="mt-6 space-y-5">
                 <div className="space-y-2">
-                  <Label>Choose your role</Label>
+                  <Label>{t.auth.chooseRole}</Label>
                   <div className="grid gap-2">
                     {roles.map((r) => (
                       <button
@@ -81,94 +78,117 @@ export function AuthPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" className="rounded-sm" />
+                  <Label htmlFor="email">{t.auth.email}</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={t.newsletter.placeholder}
+                    className="rounded-sm"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" placeholder="At least 8 characters" className="rounded-sm" />
+                  <Label htmlFor="password">{t.auth.password}</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder={t.auth.passwordPlaceholder}
+                    className="rounded-sm"
+                  />
                 </div>
                 <Button
-                  className="w-full rounded-sm font-semibold uppercase"
+                  className={`w-full rounded-sm font-semibold ${caseClass}`}
                   onClick={() => {
-                    toast.success("Verification email sent — next, complete your profile.");
+                    toast.success(t.auth.verifySent);
                     setStep("profile");
                   }}
                 >
-                  Create account
+                  {t.auth.createAccount}
                 </Button>
-                <Providers />
+                <AuthProviders />
               </TabsContent>
 
               <TabsContent value="signin" className="mt-6 space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="email2">Email</Label>
-                  <Input id="email2" type="email" placeholder="you@example.com" className="rounded-sm" />
+                  <Label htmlFor="email2">{t.auth.email}</Label>
+                  <Input
+                    id="email2"
+                    type="email"
+                    placeholder={t.newsletter.placeholder}
+                    className="rounded-sm"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password2">Password</Label>
+                  <Label htmlFor="password2">{t.auth.password}</Label>
                   <Input id="password2" type="password" className="rounded-sm" />
                 </div>
                 <Button
-                  className="w-full rounded-sm font-semibold uppercase"
-                  onClick={() => toast.success("Signed in (demo)")}
+                  className={`w-full rounded-sm font-semibold ${caseClass}`}
+                  onClick={() => toast.success(t.auth.signedIn)}
                 >
-                  Sign in
+                  {t.auth.signIn}
                 </Button>
                 <div className="flex justify-between text-sm">
                   <button
                     className="font-semibold text-primary"
-                    onClick={() => toast.success("Magic link sent")}
+                    onClick={() => toast.success(t.auth.magicSent)}
                   >
-                    <Mail className="mr-1 inline size-3.5" /> Email me a magic link
+                    <Mail className="mr-1 inline size-3.5" /> {t.auth.magicLink}
                   </button>
                   <button
                     className="text-muted-foreground"
-                    onClick={() => toast.success("Password reset email sent")}
+                    onClick={() => toast.success(t.auth.resetSent)}
                   >
-                    Forgot password?
+                    {t.auth.forgot}
                   </button>
                 </div>
-                <Providers />
+                <AuthProviders />
               </TabsContent>
             </Tabs>
           ) : (
             <div className="space-y-5">
               <div>
-                <p className="text-primary kicker">Step 2 of 2</p>
-                <h2 className="mt-1 text-2xl">Complete your profile</h2>
+                <p className="text-primary kicker">{t.auth.step2}</p>
+                <h2 className="mt-1 text-2xl">{t.auth.completeProfile}</h2>
               </div>
               <div className="flex items-center gap-4">
                 <span className="grid size-16 place-items-center rounded-full bg-secondary text-xs text-muted-foreground">
-                  Avatar
+                  {t.auth.avatar}
                 </span>
-                <Button variant="outline" className="rounded-sm" onClick={() => toast("Avatar upload (demo)")}>
-                  Upload avatar
+                <Button
+                  variant="outline"
+                  className="rounded-sm"
+                  onClick={() => toast(t.auth.avatarDemo)}
+                >
+                  {t.auth.uploadAvatar}
                 </Button>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
+                <Label htmlFor="name">{t.auth.fullName}</Label>
                 <Input id="name" placeholder="Ada Nwosu" maxLength={100} className="rounded-sm" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="bio">Short bio</Label>
-                <Textarea id="bio" maxLength={280} placeholder="One or two lines about you" className="rounded-sm" />
+                <Label htmlFor="bio">{t.auth.shortBio}</Label>
+                <Textarea
+                  id="bio"
+                  maxLength={280}
+                  placeholder={t.auth.bioPlaceholder}
+                  className="rounded-sm"
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="social">Social link</Label>
+                <Label htmlFor="social">{t.auth.socialLink}</Label>
                 <Input id="social" placeholder="https://x.com/you" className="rounded-sm" />
               </div>
               {role !== "reader" && (
                 <p className="border-l-4 border-primary bg-primary/5 p-3 text-sm">
-                  Your <strong>{role}</strong> access is pending review. You'll get an email once an
-                  editor approves it — reader access works immediately.
+                  {msg(t.auth.pendingNote, { role: t.roles[role] ?? role })}
                 </p>
               )}
               <Button
-                className="w-full rounded-sm font-semibold uppercase"
-                onClick={() => toast.success("Profile saved")}
+                className={`w-full rounded-sm font-semibold ${caseClass}`}
+                onClick={() => toast.success(t.auth.profileSaved)}
               >
-                Finish
+                {t.auth.finish}
               </Button>
             </div>
           )}
@@ -178,18 +198,27 @@ export function AuthPage() {
   );
 }
 
-function Providers() {
+function AuthProviders() {
+  const { t } = useI18n();
   return (
     <>
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" /> or continue with{" "}
+        <span className="h-px flex-1 bg-border" /> {t.auth.orContinue}{" "}
         <span className="h-px flex-1 bg-border" />
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
-        <Button variant="outline" className="rounded-sm" onClick={() => toast("Google OAuth (demo)")}>
+        <Button
+          variant="outline"
+          className="rounded-sm"
+          onClick={() => toast("Google OAuth (demo)")}
+        >
           Google
         </Button>
-        <Button variant="outline" className="rounded-sm" onClick={() => toast("GitHub OAuth (demo)")}>
+        <Button
+          variant="outline"
+          className="rounded-sm"
+          onClick={() => toast("GitHub OAuth (demo)")}
+        >
           <Github className="size-4" /> GitHub
         </Button>
       </div>

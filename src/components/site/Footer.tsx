@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { BrandLogo } from "./BrandLogo";
 import { XIcon } from "./XIcon";
 import footerBg from "@/assets/footer-bg.jpg";
+import { useI18n } from "./LanguageProvider";
 
 const socials = [
   { label: "X", icon: XIcon },
@@ -16,14 +17,15 @@ const socials = [
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const { t, msg } = useI18n();
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      toast.error("Enter a valid email address");
+      toast.error(t.footer.invalidEmail);
       return;
     }
-    toast.success("You're on the list — watch your inbox.");
+    toast.success(t.footer.signupSuccess);
     setEmail("");
   }
 
@@ -50,17 +52,16 @@ export function Footer() {
 
           <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-1.5 kicker text-ink-foreground/80">
             <span className="size-1.5 rounded-full bg-primary" />
-            Coming soon
+            {t.footer.comingSoon}
           </span>
 
           <h2 className="mt-6 text-3xl leading-[1.1] sm:text-4xl md:text-5xl">
-            Sign Up To Our Email List To Get Notified When We{" "}
-            <span className="text-primary">Launch.</span>
+            {t.footer.signupTitleBefore}{" "}
+            <span className="text-primary">{t.footer.signupTitleAccent}</span>
           </h2>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-ink-foreground/70">
-            We craft newsroom-grade reporting and commissioned features — built for credibility,
-            clarity and stories that keep their value.
+            {t.footer.signupBody}
           </p>
 
           <form
@@ -71,16 +72,16 @@ export function Footer() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address..."
+              placeholder={t.footer.emailPlaceholder}
               maxLength={255}
-              aria-label="Email address"
+              aria-label={t.footer.emailAria}
               className="min-w-0 flex-1 bg-transparent text-sm text-ink-foreground placeholder:text-ink-foreground/55 focus:outline-none"
             />
             <button
               type="submit"
               className="shrink-0 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Submit
+              {t.footer.submit}
             </button>
           </form>
 
@@ -102,11 +103,10 @@ export function Footer() {
           <BrandLogo className="h-16 w-auto opacity-90 sm:h-24 md:h-28" />
         </div>
 
-
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/10 px-4 py-6 text-xs text-ink-foreground/60 sm:flex-row">
-          <span>Copyright © {new Date().getFullYear()}</span>
+          <span>{msg(t.footer.copyright, { year: new Date().getFullYear() })}</span>
           <span>
-            Independent Daily by <span className="font-semibold italic">Pressroom</span>
+            {t.footer.independentDaily} <span className="font-semibold italic">Pressroom</span>
           </span>
           <a
             href="https://www.wewillaustralia.com.au/"
@@ -114,7 +114,7 @@ export function Footer() {
             rel="noopener noreferrer"
             className="font-medium text-ink-foreground/80 transition-colors hover:text-primary"
           >
-            Powered by We Will Australia
+            {t.footer.poweredBy}
           </a>
         </div>
       </div>

@@ -14,10 +14,13 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { authorById, categories, formatDate, published, readingTime, type Article } from "@/lib/mock-data";
+import { useI18n } from "@/components/site/LanguageProvider";
+import { authorById, categories, published, readingTime, type Article } from "@/lib/mock-data";
 
 export function HomePage() {
   const [tab, setTab] = useState("All");
+  const { t, formatDate, categoryName, locale } = useI18n();
+  const caseClass = locale === "si" ? "" : "uppercase";
   const heroSlides = [published[0]!, published[3]!, published[6]!];
   const secondary = published.slice(1, 3);
   const usedAbove = new Set([...heroSlides, ...secondary].map((a) => a.id));
@@ -27,7 +30,10 @@ export function HomePage() {
       : published.filter((a) => a.category === tab && a.id !== heroSlides[0]!.id).slice(0, 4);
   const used = new Set([...usedAbove, ...trendingGrid.map((a) => a.id)]);
   const mostRead = published.filter((a) => !used.has(a.id)).slice(0, 4);
-  const featured = published.filter((a) => a.featured && !used.has(a.id) && !mostRead.some((m) => m.id === a.id));
+  const featured = published.filter(
+    (a) => a.featured && !used.has(a.id) && !mostRead.some((m) => m.id === a.id),
+  );
+  const tabs = ["All", ...categories.slice(0, 4).map((c) => c.name)];
 
   return (
     <SiteLayout>
@@ -51,8 +57,12 @@ export function HomePage() {
 
               {/* top row */}
               <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 bg-gradient-to-b from-black/70 to-transparent p-5">
-                <span className="font-display text-lg tracking-tight text-white">PRESSROOM</span>
-                <span className="text-xs font-medium text-white/85">{formatDate(a.publishedAt)}</span>
+                <span className="font-display text-lg tracking-tight text-white">
+                  {t.common.pressroom}
+                </span>
+                <span className="text-xs font-medium text-white/85">
+                  {formatDate(a.publishedAt)}
+                </span>
               </div>
 
               <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-4 bg-gradient-to-t from-black/80 via-black/35 to-transparent p-5 pt-16 md:p-6 md:pt-20">
@@ -67,7 +77,7 @@ export function HomePage() {
                 </div>
                 <Link href={`/article/${a.slug}`} className="shrink-0">
                   <span className="inline-flex items-center rounded-full border border-white/40 bg-white/10 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary hover:border-primary hover:text-primary-foreground">
-                    Learn more
+                    {t.common.learnMore}
                   </span>
                 </Link>
               </div>
@@ -79,20 +89,20 @@ export function HomePage() {
       {/* Trending + tabs */}
       <section className="mx-auto max-w-7xl px-4 py-14">
         <SectionHeading
-          title="Trending News"
+          title={t.home.trending}
           action={
             <div className="hidden gap-2 md:flex">
-              {["All", ...categories.slice(0, 4).map((c) => c.name)].map((t) => (
+              {tabs.map((item) => (
                 <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  className={`px-3 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
-                    tab === t
+                  key={item}
+                  onClick={() => setTab(item)}
+                  className={`px-3 py-1 text-xs font-semibold ${caseClass} tracking-wide transition-colors ${
+                    tab === item
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-primary"
                   }`}
                 >
-                  {t}
+                  {item === "All" ? t.common.all : categoryName(item)}
                 </button>
               ))}
             </div>
@@ -104,13 +114,13 @@ export function HomePage() {
               <ArticleCard key={a.id} article={a} />
             ))}
             {trendingGrid.length === 0 && (
-              <p className="text-sm text-muted-foreground">No stories in this section yet.</p>
+              <p className="text-sm text-muted-foreground">{t.home.noStories}</p>
             )}
           </div>
           <aside className="space-y-8">
             <div className="card-press p-5">
               <p className="mb-4 flex items-center gap-2 text-primary kicker">
-                <Flame className="size-3.5" /> Most read
+                <Flame className="size-3.5" /> {t.home.mostRead}
               </p>
               <div className="space-y-4">
                 {mostRead.map((a) => (
@@ -120,13 +130,13 @@ export function HomePage() {
             </div>
             <div className="card-press p-5">
               <p className="mb-4 flex items-center gap-2 text-primary kicker">
-                <TrendingUp className="size-3.5" /> Sections
+                <TrendingUp className="size-3.5" /> {t.home.sections}
               </p>
               <ul className="space-y-2 text-sm">
                 {categories.map((c) => (
                   <li key={c.id} className="flex items-center justify-between border-b pb-2">
                     <Link href={`/category/${c.slug}`} className="font-semibold hover:text-primary">
-                      {c.name}
+                      {categoryName(c.name)}
                     </Link>
                     <span className="text-xs text-muted-foreground">{c.count}</span>
                   </li>
@@ -139,45 +149,44 @@ export function HomePage() {
       </section>
 
       {featured.length > 0 && (
-      <section className="border-y border-border bg-secondary/40 py-14">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading title="Featured" />
-          <div className="grid gap-6 md:grid-cols-3">
-            {featured.map((a) => (
-              <ArticleCard key={a.id} article={a} />
-            ))}
+        <section className="border-y border-border bg-secondary/40 py-14">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeading title={t.home.featured} />
+            <div className="grid gap-6 md:grid-cols-3">
+              {featured.map((a) => (
+                <ArticleCard key={a.id} article={a} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* Commission CTA */}
       <section className="mx-auto max-w-7xl px-4 py-14">
         <div className="card-press grid items-center gap-8 p-8 md:grid-cols-[1.4fr_1fr] md:p-12">
           <div>
-            <p className="text-primary kicker">For brands and founders</p>
-            <h2 className="mt-3 text-3xl md:text-4xl">Commission our writers.</h2>
-            <p className="mt-3 max-w-xl font-serif text-muted-foreground">
-              Brief us once and get newsroom-grade writing: researched, fact-checked, edited and delivered
-              on a deadline you set. Track every stage from your dashboard.
-            </p>
+            <p className="text-primary kicker">{t.home.ctaKicker}</p>
+            <h2 className="mt-3 text-3xl md:text-4xl">{t.home.ctaTitle}</h2>
+            <p className="mt-3 max-w-xl font-serif text-muted-foreground">{t.home.ctaBody}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/order">
-                <Button className="rounded-sm font-semibold uppercase">See pricing</Button>
+                <Button className={`rounded-sm font-semibold ${caseClass}`}>
+                  {t.home.seePricing}
+                </Button>
               </Link>
               <Link href="/writer">
-                <Button variant="outline" className="rounded-sm font-semibold uppercase">
-                  Write for us
+                <Button variant="outline" className={`rounded-sm font-semibold ${caseClass}`}>
+                  {t.home.writeForUs}
                 </Button>
               </Link>
             </div>
           </div>
           <dl className="grid grid-cols-2 gap-6">
             {[
-              ["240+", "Commissions delivered"],
-              ["4.9/5", "Client rating"],
-              ["48h", "Fastest turnaround"],
-              ["31", "Vetted writers"],
+              ["240+", t.home.statCommissions],
+              ["4.9/5", t.home.statRating],
+              ["48h", t.home.statTurnaround],
+              ["31", t.home.statWriters],
             ].map(([n, l]) => (
               <div key={l}>
                 <dt className="font-display text-3xl text-primary">{n}</dt>
@@ -196,6 +205,7 @@ export function HomePage() {
 function HeroCarousel({ slides }: { slides: Article[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [index, setIndex] = useState(0);
+  const { t, msg } = useI18n();
 
   useEffect(() => {
     if (!api) return;
@@ -226,7 +236,7 @@ function HeroCarousel({ slides }: { slides: Article[] }) {
             <button
               key={article.id}
               type="button"
-              aria-label={`Go to story ${i + 1}`}
+              aria-label={msg(t.common.goToStory, { n: i + 1 })}
               aria-current={index === i}
               className={`h-2.5 rounded-full transition-all ${
                 index === i ? "w-8 bg-primary" : "w-2.5 bg-foreground/25 hover:bg-foreground/45"
@@ -241,6 +251,7 @@ function HeroCarousel({ slides }: { slides: Article[] }) {
 }
 
 function HeroSlide({ article }: { article: Article }) {
+  const { t, formatDate, formatNumber, msg } = useI18n();
   return (
     <div className="relative">
       <img
@@ -263,11 +274,11 @@ function HeroSlide({ article }: { article: Article }) {
             </h1>
             <p className="max-w-2xl font-serif text-white/80">{article.excerpt}</p>
             <div className="flex items-center gap-4 text-sm text-white/75">
-              <span>By {authorById(article.authorId).name}</span>
+              <span>{msg(t.common.by, { name: authorById(article.authorId).name })}</span>
               <span className="flex items-center gap-1">
-                <Eye className="size-3.5" /> {article.views.toLocaleString()}
+                <Eye className="size-3.5" /> {formatNumber(article.views)}
               </span>
-              <span>{readingTime(article.content)} min read</span>
+              <span>{msg(t.common.minRead, { n: readingTime(article.content) })}</span>
             </div>
           </div>
         </div>

@@ -1,15 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Bookmark,
-  Clock,
-  Eye,
-  Facebook,
-  Linkedin,
-  MessageSquare,
-  Share2,
-} from "lucide-react";
+import { Bookmark, Clock, Eye, Facebook, Linkedin, MessageSquare, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -23,12 +15,12 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   authorById,
   commentThread,
-  formatDate,
   published,
   readingTime,
   type Article,
   type Comment,
 } from "@/lib/mock-data";
+import { useI18n } from "@/components/site/LanguageProvider";
 
 export function ArticlePage({ article }: { article: Article }) {
   const author = authorById(article.authorId);
@@ -36,6 +28,8 @@ export function ArticlePage({ article }: { article: Article }) {
   const [saved, setSaved] = useState(false);
   const [comments, setComments] = useState<Comment[]>(commentThread);
   const [draft, setDraft] = useState("");
+  const { t, msg, formatDate, formatNumber, categoryName, locale } = useI18n();
+  const caseClass = locale === "si" ? "" : "uppercase";
 
   useEffect(() => {
     function onScroll() {
@@ -58,15 +52,21 @@ export function ArticlePage({ article }: { article: Article }) {
   function postComment(e: React.FormEvent) {
     e.preventDefault();
     if (draft.trim().length < 3) {
-      toast.error("Write a little more before posting.");
+      toast.error(t.article.commentTooShort);
       return;
     }
     setComments([
       ...comments,
-      { id: String(Date.now()), author: "You", initials: "YO", createdAt: "just now", content: draft.trim() },
+      {
+        id: String(Date.now()),
+        author: t.common.you,
+        initials: "YO",
+        createdAt: t.common.justNow,
+        content: draft.trim(),
+      },
     ]);
     setDraft("");
-    toast.success("Comment posted");
+    toast.success(t.article.commentPosted);
   }
 
   const structuredData = {
@@ -81,13 +81,19 @@ export function ArticlePage({ article }: { article: Article }) {
 
   return (
     <SiteLayout>
-      <div className="fixed left-0 top-0 z-[60] h-1 bg-primary transition-[width]" style={{ width: `${progress}%` }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <div
+        className="fixed left-0 top-0 z-[60] h-1 bg-primary transition-[width]"
+        style={{ width: `${progress}%` }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
       <article className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-12 lg:grid-cols-[1fr_320px]">
           <div>
-            <p className="text-primary kicker">{article.category}</p>
+            <p className="text-primary kicker">{categoryName(article.category)}</p>
             <h1 className="mt-3 text-3xl sm:text-4xl md:text-[2.75rem]">{article.title}</h1>
             <p className="mt-4 font-serif text-lg text-muted-foreground">{article.excerpt}</p>
 
@@ -100,10 +106,11 @@ export function ArticlePage({ article }: { article: Article }) {
               </Link>
               <span>{formatDate(article.publishedAt)}</span>
               <span className="flex items-center gap-1">
-                <Clock className="size-3.5" /> {readingTime(article.content)} min read
+                <Clock className="size-3.5" />{" "}
+                {msg(t.common.minRead, { n: readingTime(article.content) })}
               </span>
               <span className="flex items-center gap-1">
-                <Eye className="size-3.5" /> {article.views.toLocaleString()}
+                <Eye className="size-3.5" /> {formatNumber(article.views)}
               </span>
               <div className="ml-auto flex items-center gap-2">
                 <Button
@@ -112,16 +119,16 @@ export function ArticlePage({ article }: { article: Article }) {
                   className="rounded-sm"
                   onClick={() => {
                     setSaved(!saved);
-                    toast.success(saved ? "Removed from reading list" : "Saved to reading list");
+                    toast.success(saved ? t.article.removedToast : t.article.savedToast);
                   }}
                 >
-                  <Bookmark className="size-3.5" /> {saved ? "Saved" : "Save"}
+                  <Bookmark className="size-3.5" /> {saved ? t.article.saved : t.article.save}
                 </Button>
                 {[
-                  { Icon: XIcon, label: "Share on X" },
-                  { Icon: Facebook, label: "Share on Facebook" },
-                  { Icon: Linkedin, label: "Share on LinkedIn" },
-                  { Icon: Share2, label: "Share" },
+                  { Icon: XIcon, label: t.article.shareX },
+                  { Icon: Facebook, label: t.article.shareFacebook },
+                  { Icon: Linkedin, label: t.article.shareLinkedIn },
+                  { Icon: Share2, label: t.article.share },
                 ].map(({ Icon, label }) => (
                   <Button
                     key={label}
@@ -150,7 +157,10 @@ export function ArticlePage({ article }: { article: Article }) {
 
             <div className="mt-8 flex flex-wrap gap-2">
               {article.tags.map((t) => (
-                <span key={t} className="border border-border px-2 py-1 kicker text-muted-foreground">
+                <span
+                  key={t}
+                  className="border border-border px-2 py-1 kicker text-muted-foreground"
+                >
                   #{t}
                 </span>
               ))}
@@ -162,30 +172,33 @@ export function ArticlePage({ article }: { article: Article }) {
                 {author.avatarInitials}
               </span>
               <div>
-                <p className="text-primary kicker">Written by</p>
+                <p className="text-primary kicker">{t.article.writtenBy}</p>
                 <h3 className="text-lg">{author.name}</h3>
                 <p className="mt-1 font-serif text-sm text-muted-foreground">{author.bio}</p>
-                <Link href={`/author/${author.id}`} className="mt-2 inline-block text-sm font-semibold text-primary">
-                  All stories by {author.name.split(" ")[0]} →
+                <Link
+                  href={`/author/${author.id}`}
+                  className="mt-2 inline-block text-sm font-semibold text-primary"
+                >
+                  {msg(t.article.allStories, { name: author.name.split(" ")[0] ?? author.name })}
                 </Link>
               </div>
             </div>
 
             {/* Comments */}
             <section className="mt-12">
-              <SectionHeading title={`Comments (${comments.length})`} />
+              <SectionHeading title={msg(t.article.comments, { n: comments.length })} />
               <form onSubmit={postComment} className="card-press p-4">
                 <Textarea
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
                   maxLength={1000}
-                  placeholder="Add to the discussion…"
+                  placeholder={t.article.commentPlaceholder}
                   className="rounded-sm"
                 />
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{draft.length}/1000</span>
-                  <Button type="submit" className="rounded-sm font-semibold uppercase">
-                    Post comment
+                  <Button type="submit" className={`rounded-sm font-semibold ${caseClass}`}>
+                    {t.article.postComment}
                   </Button>
                 </div>
               </form>
@@ -222,7 +235,7 @@ export function ArticlePage({ article }: { article: Article }) {
                         {a.excerpt}
                       </p>
                       <span className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-ink">
-                        Read story
+                        {t.common.readStory}
                       </span>
                     </div>
                   </div>
@@ -232,7 +245,7 @@ export function ArticlePage({ article }: { article: Article }) {
 
             <div className="card-press p-5">
               <p className="mb-4 flex items-center gap-2 text-primary kicker">
-                <MessageSquare className="size-3.5" /> Related reading
+                <MessageSquare className="size-3.5" /> {t.article.related}
               </p>
               <div className="space-y-4">
                 {moreStories.map((a) => (
@@ -247,7 +260,7 @@ export function ArticlePage({ article }: { article: Article }) {
 
       <section className="border-t border-border bg-secondary/40 py-14">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading title="More from the show" />
+          <SectionHeading title={t.article.moreFromShow} />
           <div className="grid gap-6 md:grid-cols-3">
             {fallbackRelated.map((a) => (
               <ArticleCard key={a.id} article={a} />
