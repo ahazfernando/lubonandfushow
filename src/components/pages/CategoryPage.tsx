@@ -2,7 +2,6 @@
 
 import { ArticleCard } from "@/components/site/ArticleCard";
 import { useI18n } from "@/components/site/LanguageProvider";
-import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import type { Article } from "@/lib/mock-data";
 
@@ -37,8 +36,6 @@ export function CategoryPage({
           <p className="font-serif text-muted-foreground">{t.category.empty}</p>
         )}
       </section>
-
-      <Newsletter />
     </SiteLayout>
   );
 }

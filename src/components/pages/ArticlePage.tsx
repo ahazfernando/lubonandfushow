@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 import { ArticleCard, ArticleRow, CategoryTag } from "@/components/site/ArticleCard";
 import { Markdown } from "@/components/site/Markdown";
-import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { XIcon } from "@/components/site/XIcon";
 import { Button } from "@/components/ui/button";
@@ -253,7 +252,6 @@ export function ArticlePage({ article }: { article: Article }) {
                 ))}
               </div>
             </div>
-            <Newsletter compact />
           </aside>
         </div>
       </article>

@@ -1,10 +1,13 @@
 "use client";
 
-import { BarChart3, Check, Eye, MessageSquare, X } from "lucide-react";
+import { BarChart3, Check, Eye, LogOut, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 
+import { AdminLoginForm } from "@/components/site/AdminLoginForm";
 import { ArticleEditor } from "@/components/site/ArticleEditor";
 import { CouponManager } from "@/components/site/CouponManager";
+import { useAuth } from "@/components/site/AuthProvider";
+import { useI18n } from "@/components/site/LanguageProvider";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,23 +21,68 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { articles, authorById, authors, categories, readingTime } from "@/lib/mock-data";
-import { useI18n } from "@/components/site/LanguageProvider";
 
 export function AdminPage() {
   const queue = articles.filter((a) => a.status === "pending_review");
   const totalViews = articles.reduce((s, a) => s + a.views, 0);
   const { t, msg, formatDate, formatNumber, categoryName, locale } = useI18n();
+  const { user, loading, isAdmin, signOut } = useAuth();
   const caseClass = locale === "si" ? "" : "uppercase";
+
+  async function handleSignOut() {
+    await signOut();
+    toast.success(t.nav.signOut);
+  }
 
   return (
     <SiteLayout>
       <div className="border-b border-border bg-ink py-10 text-ink-foreground">
-        <div className="mx-auto max-w-7xl px-4">
-          <p className="text-primary kicker">{t.admin.kicker}</p>
-          <h1 className="mt-2 text-3xl md:text-4xl">{t.admin.title}</h1>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4 px-4">
+          <div>
+            <p className="text-primary kicker">{t.admin.kicker}</p>
+            <h1 className="mt-2 text-3xl md:text-4xl">{t.admin.title}</h1>
+            {user?.email ? (
+              <p className="mt-2 text-sm opacity-70">
+                {msg(t.admin.signedInAs, { email: user.email })}
+              </p>
+            ) : null}
+          </div>
+          {user ? (
+            <Button
+              type="button"
+              variant="outline"
+              className={`rounded-sm border-white/20 bg-transparent font-semibold text-ink-foreground hover:bg-white/10 ${caseClass}`}
+              onClick={() => void handleSignOut()}
+            >
+              <LogOut className="size-4" /> {t.nav.signOut}
+            </Button>
+          ) : null}
         </div>
       </div>
 
+      {loading ? (
+        <p className="mx-auto max-w-7xl px-4 py-14 text-sm text-muted-foreground">
+          {t.admin.checkingSession}
+        </p>
+      ) : !user ? (
+        <AdminLoginForm />
+      ) : !isAdmin ? (
+        <div className="mx-auto max-w-md px-4 py-14">
+          <div className="card-press p-6 md:p-8">
+            <h2 className="text-2xl">{t.admin.accessDeniedTitle}</h2>
+            <p className="mt-2 font-serif text-sm text-muted-foreground">
+              {t.admin.accessDeniedBody}
+            </p>
+            <Button
+              type="button"
+              className={`mt-6 rounded-sm font-semibold ${caseClass}`}
+              onClick={() => void handleSignOut()}
+            >
+              <LogOut className="size-4" /> {t.nav.signOut}
+            </Button>
+          </div>
+        </div>
+      ) : (
       <div className="w-full py-10">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-10 grid gap-4 sm:grid-cols-4">
@@ -86,42 +134,40 @@ export function AdminPage() {
           </TabsContent>
 
           <TabsContent value="articles" className="mt-8">
-            <div className="px-4">
-              <div className="mx-auto max-w-[1800px]">
-                <SectionHeading title={t.admin.allArticles} />
-                <div className="card-press overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-secondary/60 text-left kicker">
-                      <tr>
-                        <th className="p-3">{t.admin.colHeadline}</th>
-                        <th className="p-3">{t.admin.colAuthor}</th>
-                        <th className="p-3">{t.admin.colSection}</th>
-                        <th className="p-3">{t.admin.colStatus}</th>
-                        <th className="p-3">{t.admin.colDate}</th>
-                        <th className="p-3">{t.admin.colViews}</th>
+            <div className="mx-auto max-w-7xl px-4">
+              <SectionHeading title={t.admin.allArticles} />
+              <div className="card-press overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/60 text-left kicker">
+                    <tr>
+                      <th className="p-3">{t.admin.colHeadline}</th>
+                      <th className="p-3">{t.admin.colAuthor}</th>
+                      <th className="p-3">{t.admin.colSection}</th>
+                      <th className="p-3">{t.admin.colStatus}</th>
+                      <th className="p-3">{t.admin.colDate}</th>
+                      <th className="p-3">{t.admin.colViews}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {articles.map((a) => (
+                      <tr key={a.id} className="border-t border-border">
+                        <td className="max-w-xs p-3 font-semibold">{a.title}</td>
+                        <td className="p-3">{authorById(a.authorId).name}</td>
+                        <td className="p-3">{categoryName(a.category)}</td>
+                        <td className="p-3">
+                          <span className="bg-secondary px-2 py-1 kicker">
+                            {t.status[a.status] ?? a.status}
+                          </span>
+                        </td>
+                        <td className="p-3">{formatDate(a.publishedAt)}</td>
+                        <td className="p-3">{formatNumber(a.views)}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {articles.map((a) => (
-                        <tr key={a.id} className="border-t border-border">
-                          <td className="max-w-xs p-3 font-semibold">{a.title}</td>
-                          <td className="p-3">{authorById(a.authorId).name}</td>
-                          <td className="p-3">{categoryName(a.category)}</td>
-                          <td className="p-3">
-                            <span className="bg-secondary px-2 py-1 kicker">
-                              {t.status[a.status] ?? a.status}
-                            </span>
-                          </td>
-                          <td className="p-3">{formatDate(a.publishedAt)}</td>
-                          <td className="p-3">{formatNumber(a.views)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </TabsContent>
+              </div>
+            </TabsContent>
 
           <TabsContent value="queue" className="mt-8">
             <div className="mx-auto max-w-7xl px-4 space-y-6">
@@ -323,6 +369,7 @@ export function AdminPage() {
           </TabsContent>
         </Tabs>
       </div>
+      )}
     </SiteLayout>
   );
 }

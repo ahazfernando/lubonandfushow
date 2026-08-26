@@ -1,10 +1,9 @@
 "use client";
 
-import { Check, CreditCard, MessageSquare, Send } from "lucide-react";
+import { Check, CreditCard, FileSearch, MessageSquare, PenLine, Send, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,21 +100,31 @@ export function OrderPage() {
         </div>
       </section>
 
-      <section className="border-b border-border py-10">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ["01", t.order.stepAssign, t.order.stepAssignBody],
-            ["02", t.order.stepReport, t.order.stepReportBody],
-            ["03", t.order.stepEdit, t.order.stepEditBody],
-            ["04", t.order.stepFile, t.order.stepFileBody],
-          ].map(([n, title, d]) => (
-            <div key={n}>
-              <p className="text-primary kicker">
-                {n} {title}
-              </p>
-              <p className="mt-2 font-serif text-sm text-muted-foreground">{d}</p>
-            </div>
-          ))}
+      <section className="bg-black py-16 text-white" id="order-process">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-6 right-[12.5%] left-[12.5%] hidden h-px bg-primary/70 lg:block"
+            />
+            {[
+              { n: "01", title: t.order.stepAssign, body: t.order.stepAssignBody, Icon: UserPlus },
+              { n: "02", title: t.order.stepReport, body: t.order.stepReportBody, Icon: FileSearch },
+              { n: "03", title: t.order.stepEdit, body: t.order.stepEditBody, Icon: PenLine },
+              { n: "04", title: t.order.stepFile, body: t.order.stepFileBody, Icon: Send },
+            ].map(({ n, title, body, Icon }) => (
+              <div key={n} className="relative">
+                <div className="relative z-10 mb-5 grid size-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_0_22px_oklch(0.53_0.223_28.5_/_0.65)]">
+                  <Icon className="size-5" strokeWidth={2.25} />
+                </div>
+                <p className="font-semibold tracking-tight text-white">
+                  <span className="text-primary kicker mr-2">{n}</span>
+                  {title}
+                </p>
+                <p className="mt-2 max-w-xs font-serif text-sm leading-relaxed text-white/60">{body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -403,8 +412,6 @@ export function OrderPage() {
           </table>
         </div>
       </section>
-
-      <Newsletter />
     </SiteLayout>
   );
 }

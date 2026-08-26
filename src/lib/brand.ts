@@ -1,6 +1,7 @@
 export const brand = {
   name: "The Liban & Fu Show",
   logo: "/logo/libanandfushow.png",
+  authLogo: "/logo/upsideboat.png",
 } as const;
 
 export const brandOpenGraphImages = [

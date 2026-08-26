@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import { Menu, Search, Zap } from "lucide-react";
 import { useState } from "react";
 
+import { AccountMenu } from "./AccountMenu";
 import { BrandLogo } from "./BrandLogo";
 import { LanguageToggle } from "./LanguageToggle";
 import { useI18n } from "./LanguageProvider";
 import { ThemeToggle } from "./ThemeToggle";
+import { useAuth } from "./AuthProvider";
 import { Button } from "@/components/ui/button";
 import { breakingStories, categories } from "@/lib/mock-data";
 
@@ -17,6 +19,7 @@ export function Header() {
   const pathname = usePathname();
   const ticker = breakingStories;
   const { t, categoryName, locale } = useI18n();
+  const { user, signOut } = useAuth();
   const caseClass = locale === "si" ? "tracking-wide" : "uppercase tracking-wide";
 
   const nav = [
@@ -48,9 +51,7 @@ export function Header() {
               ))}
             </div>
           </div>
-          <Link href="/auth" className="hidden shrink-0 font-semibold sm:block">
-            {t.nav.signIn}
-          </Link>
+          <AccountMenu />
         </div>
       </div>
 
@@ -122,6 +123,26 @@ export function Header() {
               {n.label}
             </Link>
           ))}
+          {user ? (
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                void signOut();
+              }}
+              className={`block py-2 text-sm font-semibold ${caseClass}`}
+            >
+              {t.nav.signOut}
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className={`block py-2 text-sm font-semibold ${caseClass}`}
+            >
+              {t.nav.signIn}
+            </Link>
+          )}
         </div>
       )}
     </header>

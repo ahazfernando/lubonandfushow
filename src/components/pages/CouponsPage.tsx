@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 
 import { CouponCard } from "@/components/site/CouponCard";
 import { useI18n } from "@/components/site/LanguageProvider";
-import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { fetchCoupons } from "@/lib/coupon-api";
 import { couponCategories } from "@/lib/coupons";
@@ -43,7 +42,7 @@ export function CouponsPage() {
                   key={item}
                   type="button"
                   onClick={() => setTab(item)}
-                  className={`px-3 py-1 text-xs font-semibold tracking-wide transition-colors ${
+                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
                     tab === item
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-primary"
@@ -68,8 +67,6 @@ export function CouponsPage() {
           <p className="font-serif text-muted-foreground">{t.coupons.empty}</p>
         )}
       </section>
-
-      <Newsletter />
     </SiteLayout>
   );
 }

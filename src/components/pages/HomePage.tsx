@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 import { ArticleCard, ArticleRow, CategoryTag } from "@/components/site/ArticleCard";
 import { CouponCard } from "@/components/site/CouponCard";
-import { Newsletter } from "@/components/site/Newsletter";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -151,7 +150,6 @@ export function HomePage() {
                 ))}
               </ul>
             </div>
-            <Newsletter compact />
           </aside>
         </div>
       </section>
@@ -223,8 +221,6 @@ export function HomePage() {
           </dl>
         </div>
       </section>
-
-      <Newsletter />
     </SiteLayout>
   );
 }

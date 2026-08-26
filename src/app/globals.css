@@ -203,6 +203,70 @@
   }
 }
 
+@utility coupon-ticket {
+  position: relative;
+  overflow: visible;
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 1.1rem;
+  box-shadow: 0 14px 32px -22px oklch(0.2 0.02 40 / 0.55);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+@utility coupon-ticket-hover {
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px -24px oklch(0.2 0.02 40 / 0.55);
+  }
+}
+
+@utility coupon-stub {
+  background-color: color-mix(in oklch, var(--color-secondary) 78%, var(--color-card));
+  background-image: repeating-linear-gradient(
+    -52deg,
+    transparent,
+    transparent 7px,
+    oklch(0.16 0.012 60 / 0.035) 7px,
+    oklch(0.16 0.012 60 / 0.035) 14px
+  );
+  border-bottom-left-radius: 1.05rem;
+  border-bottom-right-radius: 1.05rem;
+}
+
+@utility coupon-notch {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 9999px;
+  background: var(--color-background);
+}
+
+@utility coupon-barcode {
+  display: flex;
+  height: 2.15rem;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1px;
+}
+
+.auth-hero {
+  background:
+    radial-gradient(140% 100% at 18% -5%, oklch(0.68 0.29 312 / 0.95), transparent 52%),
+    radial-gradient(90% 70% at 85% 15%, oklch(0.45 0.22 300 / 0.55), transparent 50%),
+    linear-gradient(165deg, oklch(0.48 0.27 310) 0%, oklch(0.22 0.12 300) 48%, oklch(0.07 0.02 280) 100%);
+}
+
+.auth-hero-grain {
+  opacity: 0.45;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
 @utility prose-press {
   font-family: var(--font-serif);
   font-size: 1.0625rem;
@@ -247,4 +311,17 @@
   & strong {
     font-weight: 700;
   }
+}
+
+.auth-hero {
+  background:
+    radial-gradient(120% 80% at 8% -8%, rgb(139 92 246 / 0.78), transparent 55%),
+    radial-gradient(90% 55% at 92% 108%, rgb(88 28 135 / 0.38), transparent 52%),
+    linear-gradient(180deg, #1c0f33 0%, #050505 72%);
+}
+
+.auth-hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  opacity: 0.42;
+  mix-blend-mode: overlay;
 }
