@@ -86,16 +86,7 @@ export function SignUpPage() {
   }
 
   return (
-    <AuthShell
-      title={t.auth.getStarted}
-      body={t.auth.getStartedBody}
-      activeStep={1}
-      steps={[
-        { n: 1, label: t.auth.stepSignUp },
-        { n: 2, label: t.auth.stepProfile },
-        { n: 3, label: t.auth.stepReading },
-      ]}
-    >
+    <AuthShell title={t.auth.getStarted} body={t.auth.getStartedBody}>
       <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
         {t.auth.signUpTitle}
       </h2>

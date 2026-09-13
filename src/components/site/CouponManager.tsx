@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { useI18n } from "./LanguageProvider";
 import { SectionHeading } from "./SiteLayout";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -310,8 +311,22 @@ export function CouponManager() {
 
       <div className="space-y-4">
         <SectionHeading title={t.coupons.library} />
-        {isLoading && <p className="text-sm text-muted-foreground">{t.coupons.loading}</p>}
-        {coupons.map((coupon) => {
+        {isLoading && (
+          <div className="space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="card-press flex gap-3 p-3">
+                <Skeleton className="h-20 w-24 shrink-0 rounded-sm" />
+                <div className="min-w-0 flex-1 space-y-2 py-1">
+                  <Skeleton className="h-4 w-[70%]" />
+                  <Skeleton className="h-3 w-32" />
+                  <Skeleton className="h-3 w-40" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {!isLoading &&
+          coupons.map((coupon) => {
           const expired = couponIsExpired(coupon);
           return (
             <div key={coupon.id} className="card-press flex gap-3 p-3">

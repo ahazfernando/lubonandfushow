@@ -94,16 +94,7 @@ export function SignInPage() {
   }
 
   return (
-    <AuthShell
-      title={t.auth.welcomeBack}
-      body={t.auth.welcomeBackBody}
-      activeStep={1}
-      steps={[
-        { n: 1, label: t.auth.stepSignIn },
-        { n: 2, label: t.auth.stepSaved },
-        { n: 3, label: t.auth.stepCommission },
-      ]}
-    >
+    <AuthShell title={t.auth.welcomeBack} body={t.auth.welcomeBackBody}>
       <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
         {t.auth.signInTitle}
       </h2>

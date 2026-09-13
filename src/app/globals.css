@@ -16,6 +16,7 @@
   --font-display: "Archivo Black", "Noto Sans Sinhala", "Arial Black", sans-serif;
   --font-sans: "Barlow", "Noto Sans Sinhala", system-ui, sans-serif;
   --font-serif: "Source Serif 4", "Noto Serif Sinhala", Georgia, serif;
+  --font-script: "Pacifico", "Noto Sans Sinhala", cursive;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -187,6 +188,11 @@
   text-transform: uppercase;
 }
 
+@utility hero-script {
+  font-family: var(--font-script);
+  line-height: 1.05;
+}
+
 @utility card-press {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
@@ -205,6 +211,8 @@
 
 @utility coupon-ticket {
   position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: visible;
   background-color: var(--color-card);
   border: 1px solid var(--color-border);
@@ -255,9 +263,9 @@
 
 .auth-hero {
   background:
-    radial-gradient(140% 100% at 18% -5%, oklch(0.68 0.29 312 / 0.95), transparent 52%),
-    radial-gradient(90% 70% at 85% 15%, oklch(0.45 0.22 300 / 0.55), transparent 50%),
-    linear-gradient(165deg, oklch(0.48 0.27 310) 0%, oklch(0.22 0.12 300) 48%, oklch(0.07 0.02 280) 100%);
+    radial-gradient(140% 100% at 18% -5%, oklch(0.62 0.24 28 / 0.95), transparent 52%),
+    radial-gradient(90% 70% at 85% 15%, oklch(0.42 0.18 25 / 0.55), transparent 50%),
+    linear-gradient(165deg, oklch(0.45 0.22 28) 0%, oklch(0.2 0.1 25) 48%, oklch(0.07 0.02 30) 100%);
 }
 
 .auth-hero-grain {
@@ -313,15 +321,4 @@
   }
 }
 
-.auth-hero {
-  background:
-    radial-gradient(120% 80% at 8% -8%, rgb(139 92 246 / 0.78), transparent 55%),
-    radial-gradient(90% 55% at 92% 108%, rgb(88 28 135 / 0.38), transparent 52%),
-    linear-gradient(180deg, #1c0f33 0%, #050505 72%);
-}
 
-.auth-hero-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  opacity: 0.42;
-  mix-blend-mode: overlay;
-}

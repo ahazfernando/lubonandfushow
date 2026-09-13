@@ -3,11 +3,13 @@
 import { BarChart3, Check, Eye, LogOut, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 
+import { AuthShell } from "@/components/auth/AuthShell";
 import { AdminLoginForm } from "@/components/site/AdminLoginForm";
 import { ArticleEditor } from "@/components/site/ArticleEditor";
 import { CouponManager } from "@/components/site/CouponManager";
 import { useAuth } from "@/components/site/AuthProvider";
 import { useI18n } from "@/components/site/LanguageProvider";
+import { PageSkeleton } from "@/components/site/PageSkeleton";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +36,32 @@ export function AdminPage() {
     toast.success(t.nav.signOut);
   }
 
+  if (loading) {
+    return <PageSkeleton variant="auth" />;
+  }
+
+  if (!user) {
+    return <AdminLoginForm />;
+  }
+
+  if (!isAdmin) {
+    return (
+      <AuthShell title={t.admin.accessDeniedTitle} body={t.admin.accessDeniedBody}>
+        <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
+          {t.admin.accessDeniedTitle}
+        </h2>
+        <p className="mt-2 text-sm text-white/45">{t.admin.accessDeniedBody}</p>
+        <button
+          type="button"
+          onClick={() => void handleSignOut()}
+          className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-bold tracking-wide text-black transition-opacity hover:opacity-90"
+        >
+          <LogOut className="size-4" /> {t.nav.signOut}
+        </button>
+      </AuthShell>
+    );
+  }
+
   return (
     <SiteLayout>
       <div className="border-b border-border bg-ink py-10 text-ink-foreground">
@@ -41,48 +69,23 @@ export function AdminPage() {
           <div>
             <p className="text-primary kicker">{t.admin.kicker}</p>
             <h1 className="mt-2 text-3xl md:text-4xl">{t.admin.title}</h1>
-            {user?.email ? (
+            {user.email ? (
               <p className="mt-2 text-sm opacity-70">
                 {msg(t.admin.signedInAs, { email: user.email })}
               </p>
             ) : null}
           </div>
-          {user ? (
-            <Button
-              type="button"
-              variant="outline"
-              className={`rounded-sm border-white/20 bg-transparent font-semibold text-ink-foreground hover:bg-white/10 ${caseClass}`}
-              onClick={() => void handleSignOut()}
-            >
-              <LogOut className="size-4" /> {t.nav.signOut}
-            </Button>
-          ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            className={`rounded-sm border-white/20 bg-transparent font-semibold text-ink-foreground hover:bg-white/10 ${caseClass}`}
+            onClick={() => void handleSignOut()}
+          >
+            <LogOut className="size-4" /> {t.nav.signOut}
+          </Button>
         </div>
       </div>
 
-      {loading ? (
-        <p className="mx-auto max-w-7xl px-4 py-14 text-sm text-muted-foreground">
-          {t.admin.checkingSession}
-        </p>
-      ) : !user ? (
-        <AdminLoginForm />
-      ) : !isAdmin ? (
-        <div className="mx-auto max-w-md px-4 py-14">
-          <div className="card-press p-6 md:p-8">
-            <h2 className="text-2xl">{t.admin.accessDeniedTitle}</h2>
-            <p className="mt-2 font-serif text-sm text-muted-foreground">
-              {t.admin.accessDeniedBody}
-            </p>
-            <Button
-              type="button"
-              className={`mt-6 rounded-sm font-semibold ${caseClass}`}
-              onClick={() => void handleSignOut()}
-            >
-              <LogOut className="size-4" /> {t.nav.signOut}
-            </Button>
-          </div>
-        </div>
-      ) : (
       <div className="w-full py-10">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-10 grid gap-4 sm:grid-cols-4">
@@ -369,7 +372,6 @@ export function AdminPage() {
           </TabsContent>
         </Tabs>
       </div>
-      )}
     </SiteLayout>
   );
 }

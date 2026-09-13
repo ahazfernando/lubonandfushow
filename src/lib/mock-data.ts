@@ -44,6 +44,15 @@ export const categories = [
   { id: "c4", name: "Food & Health", slug: "food-health", count: 10 },
   { id: "c5", name: "Travel", slug: "travel", count: 7 },
   { id: "c6", name: "Finance", slug: "finance", count: 11 },
+  { id: "c7", name: "Property", slug: "property", count: 8 },
+  { id: "c8", name: "Construction", slug: "construction", count: 6 },
+  { id: "c9", name: "Trades", slug: "trades", count: 5 },
+  { id: "c10", name: "Entrepreneurship", slug: "entrepreneurship", count: 9 },
+  { id: "c11", name: "Lifestyle", slug: "lifestyle", count: 7 },
+  { id: "c12", name: "Entertainment", slug: "entertainment", count: 8 },
+  { id: "c13", name: "Fashion", slug: "fashion", count: 6 },
+  { id: "c14", name: "Furniture", slug: "furniture", count: 5 },
+  { id: "c15", name: "Cars", slug: "cars", count: 4 },
 ];
 
 export const authors: Author[] = [

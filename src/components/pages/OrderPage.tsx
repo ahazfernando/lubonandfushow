@@ -81,15 +81,15 @@ export function OrderPage() {
 
   return (
     <SiteLayout>
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate flex min-h-[70vh] overflow-hidden md:min-h-[78vh]">
         <img
           src="/order/912f27481efe8d0e3f9dc405433d7e3c.jpg"
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/15" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/15" />
+        <div className="relative mt-auto w-full max-w-7xl px-4 pb-10 pt-28 md:px-8 md:pb-14 lg:px-10">
           <p className="text-primary kicker">{t.order.kicker}</p>
           <h1 className="mt-3 max-w-4xl text-3xl text-white sm:text-4xl md:text-5xl">
             {t.order.titleLine1}

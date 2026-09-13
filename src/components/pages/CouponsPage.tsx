@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 
 import { CouponCard } from "@/components/site/CouponCard";
 import { useI18n } from "@/components/site/LanguageProvider";
+import { CouponCardSkeleton } from "@/components/site/PageSkeleton";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { fetchCoupons } from "@/lib/coupon-api";
 import { couponCategories } from "@/lib/coupons";
@@ -56,9 +57,13 @@ export function CouponsPage() {
         />
 
         {isLoading ? (
-          <p className="text-sm text-muted-foreground">{t.coupons.loading}</p>
+          <div className="grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <CouponCardSkeleton key={i} />
+            ))}
+          </div>
         ) : filtered.length ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {filtered.map((coupon) => (
               <CouponCard key={coupon.id} coupon={coupon} />
             ))}

@@ -8,6 +8,7 @@ import { BrandLogo } from "./BrandLogo";
 import { XIcon } from "./XIcon";
 import footerBg from "@/assets/footer-bg.jpg";
 import { useI18n } from "./LanguageProvider";
+import { brand } from "@/lib/brand";
 
 const socials = [
   { label: "X", icon: XIcon },
@@ -47,7 +48,7 @@ export function Footer() {
         {/* Signup */}
         <div className="mx-auto max-w-3xl px-4 pt-16 pb-14 text-center md:pt-20">
           <div className="flex items-center justify-center">
-            <BrandLogo className="h-12 w-auto sm:h-14" />
+            <BrandLogo src={brand.footerLogo} className="h-12 w-auto sm:h-14" />
           </div>
 
           <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-1.5 kicker text-ink-foreground/80">
@@ -100,7 +101,7 @@ export function Footer() {
         </div>
 
         <div className="flex justify-center px-4 pb-4" aria-hidden>
-          <BrandLogo className="h-16 w-auto opacity-90 sm:h-24 md:h-28" />
+          <BrandLogo src={brand.footerLogo} className="h-16 w-auto opacity-90 sm:h-24 md:h-28" />
         </div>
 
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/10 px-4 py-6 text-xs text-ink-foreground/60 sm:flex-row">

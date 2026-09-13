@@ -1,24 +1,26 @@
 "use client";
 
+import Link from "next/link";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { AuthOrDivider, AuthLabel, SocialAuthButtons, authFieldClassName } from "@/components/auth/AuthFields";
+import { AuthShell } from "@/components/auth/AuthShell";
 import { useAuth } from "@/components/site/AuthProvider";
 import { useI18n } from "@/components/site/LanguageProvider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { authErrorMessage } from "@/lib/auth-errors";
 
 export function AdminLoginForm() {
-  const { t, locale } = useI18n();
-  const { configured, signIn, signInWithGoogle } = useAuth();
-  const caseClass = locale === "si" ? "" : "uppercase";
+  const { t } = useI18n();
+  const { configured, signIn, signInWithGoogle, resetPassword } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  const busy = submitting;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -59,65 +61,103 @@ export function AdminLoginForm() {
     }
   }
 
-  return (
-    <div className="mx-auto max-w-md px-4 py-14">
-      <div className="card-press p-6 md:p-8">
-        <p className="text-primary kicker">{t.admin.kicker}</p>
-        <h2 className="mt-2 text-2xl">{t.admin.signInHeading}</h2>
-        <p className="mt-2 font-serif text-sm text-muted-foreground">{t.admin.signInBody}</p>
+  async function handleReset() {
+    setError("");
+    if (!email.trim()) {
+      setError(t.auth.errorResetNeedsEmail);
+      return;
+    }
+    if (!configured) {
+      setError(t.auth.errorNotConfigured);
+      return;
+    }
+    try {
+      await resetPassword(email.trim());
+      toast.success(t.auth.resetSent);
+    } catch (err) {
+      setError(authErrorMessage(err, t.auth));
+    }
+  }
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <Label htmlFor="admin-email">{t.auth.email}</Label>
-            <Input
+  return (
+    <AuthShell title={t.admin.signInHeading} body={t.admin.signInBody}>
+      <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
+        {t.admin.signInHeading}
+      </h2>
+      <p className="mt-2 text-sm text-white/45">{t.admin.signInBody}</p>
+
+      <div className="mt-8 space-y-6">
+        <SocialAuthButtons disabled={busy} onGoogle={() => void handleGoogle()} />
+        <AuthOrDivider />
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <AuthLabel htmlFor="admin-email">{t.auth.email}</AuthLabel>
+            <input
               id="admin-email"
               type="email"
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t.auth.emailPlaceholder}
-              className="rounded-sm"
-              disabled={submitting}
+              className={authFieldClassName()}
+              disabled={busy}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="admin-password">{t.auth.password}</Label>
-            <Input
-              id="admin-password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={t.auth.enterPassword}
-              className="rounded-sm"
-              disabled={submitting}
-            />
+
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <label htmlFor="admin-password" className="text-sm font-medium text-white">
+                {t.auth.password}
+              </label>
+              <button
+                type="button"
+                className="text-xs text-white/45 transition-colors hover:text-white"
+                onClick={() => void handleReset()}
+              >
+                {t.auth.forgot}
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                id="admin-password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t.auth.enterPassword}
+                className={authFieldClassName("pr-11")}
+                disabled={busy}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 grid w-11 place-items-center text-white/40 hover:text-white/80"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? t.auth.hidePassword : t.auth.showPassword}
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
-          {error ? <p className="text-sm text-destructive">{error}</p> : null}
-          <Button
+
+          {error ? <p className="text-sm text-red-400">{error}</p> : null}
+
+          <button
             type="submit"
-            className={`w-full rounded-sm font-semibold ${caseClass}`}
-            disabled={submitting}
+            disabled={busy}
+            className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-white text-sm font-bold tracking-wide text-black transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {submitting ? <Loader2 className="size-4 animate-spin" /> : t.auth.logIn}
-          </Button>
+          </button>
         </form>
 
-        <div className="mt-6 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          {t.auth.or}
-          <span className="h-px flex-1 bg-border" />
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          className="mt-4 w-full rounded-sm"
-          disabled={submitting}
-          onClick={() => void handleGoogle()}
-        >
-          {t.auth.google}
-        </Button>
+        <p className="text-center text-sm text-white/45">
+          {t.auth.noAccount}{" "}
+          <Link href="/register?next=%2Fadmin" className="font-semibold text-white">
+            {t.auth.signUp}
+          </Link>
+        </p>
       </div>
-    </div>
+    </AuthShell>
   );
 }

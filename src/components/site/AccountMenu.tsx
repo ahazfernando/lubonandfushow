@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/components/site/AuthProvider";
 import { useI18n } from "@/components/site/LanguageProvider";
 
@@ -28,12 +29,12 @@ export function AccountMenu() {
   const { t } = useI18n();
 
   if (loading) {
-    return <span className="hidden size-8 rounded-full bg-white/10 sm:inline-block" />;
+    return <Skeleton className="hidden size-8 rounded-full sm:inline-block" />;
   }
 
   if (!user) {
     return (
-      <Link href="/login" className="hidden shrink-0 font-semibold sm:block">
+      <Link href="/login" className="hidden shrink-0 text-sm font-semibold sm:block">
         {t.nav.signIn}
       </Link>
     );

@@ -56,18 +56,20 @@ export function CouponCard({ coupon }: { coupon: Coupon }) {
   }
 
   return (
-    <article className={`coupon-ticket ${expired ? "opacity-60" : "coupon-ticket-hover"}`}>
-      <div className="relative overflow-hidden rounded-t-[1.05rem]">
+    <article
+      className={`coupon-ticket flex flex-col ${expired ? "opacity-60" : "coupon-ticket-hover"}`}
+    >
+      <div className="relative shrink-0 overflow-hidden rounded-t-[1.05rem]">
         {coupon.image ? (
           <img
             src={coupon.image}
             alt=""
-            className="h-36 w-full object-cover"
+            className="aspect-[16/10] h-auto w-full object-cover"
             width={800}
-            height={288}
+            height={500}
           />
         ) : (
-          <div className="grid h-36 place-items-center bg-secondary">
+          <div className="grid aspect-[16/10] place-items-center bg-secondary">
             <Ticket className="size-10 text-muted-foreground" />
           </div>
         )}
@@ -87,18 +89,20 @@ export function CouponCard({ coupon }: { coupon: Coupon }) {
         )}
       </div>
 
-      <div className="space-y-2 px-5 pb-4 pt-4">
+      <div className="px-5 pb-3 pt-4">
         <p className="font-display text-[1.85rem] leading-none tracking-tight text-primary">
           {coupon.discount}
         </p>
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {coupon.merchant}
         </p>
-        <h3 className="text-lg leading-snug">{coupon.title}</h3>
-        <p className="line-clamp-2 font-serif text-sm text-muted-foreground">{coupon.description}</p>
+        <h3 className="mt-1 line-clamp-2 text-lg leading-snug">{coupon.title}</h3>
+        <p className="mt-1.5 line-clamp-2 font-serif text-sm text-muted-foreground">
+          {coupon.description}
+        </p>
       </div>
 
-      <div className="relative h-5">
+      <div className="relative h-5 shrink-0">
         <span className="coupon-notch -left-px -translate-x-1/2 -translate-y-1/2 border-r border-border" />
         <span className="coupon-notch -right-px -translate-y-1/2 translate-x-1/2 border-l border-border" />
         <div className="absolute inset-x-7 top-1/2 flex -translate-y-1/2 items-center gap-2">
@@ -107,7 +111,7 @@ export function CouponCard({ coupon }: { coupon: Coupon }) {
         </div>
       </div>
 
-      <div className="coupon-stub space-y-3 px-5 pb-4 pt-3">
+      <div className="coupon-stub mt-0 shrink-0 space-y-3 px-5 pb-4 pt-3">
         <CouponBarcode code={coupon.code} />
         <div>
           <p className="mb-1.5 text-muted-foreground kicker">{t.coupons.promoCode}</p>
