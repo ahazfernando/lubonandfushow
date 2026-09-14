@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { AuthProvider } from "@/components/site/AuthProvider";
 import { CartProvider } from "@/components/site/CartProvider";
 import { LanguageProvider } from "@/components/site/LanguageProvider";
+import { ScrollToTop } from "@/components/site/ScrollToTop";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -14,7 +15,10 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <AuthProvider>
-          <CartProvider>{children}</CartProvider>
+          <CartProvider>
+            {children}
+            <ScrollToTop />
+          </CartProvider>
         </AuthProvider>
       </LanguageProvider>
     </QueryClientProvider>

@@ -6,10 +6,10 @@ import { PageSkeleton } from "@/components/site/PageSkeleton";
 import { brand, brandOpenGraphImages } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: `Shop — ${brand.name}`,
-  description: `Furniture, fashion, tools and tech from the ${brand.name} shop.`,
+  title: `Shop - ${brand.name}`,
+  description: `Furniture and tools from the ${brand.name} shop.`,
   openGraph: {
-    title: `Shop — ${brand.name}`,
+    title: `Shop - ${brand.name}`,
     description: "Browse popular products and filter by category.",
     images: brandOpenGraphImages,
   },

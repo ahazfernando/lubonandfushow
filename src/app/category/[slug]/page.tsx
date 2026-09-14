@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { cat } = byCategory(slug);
   if (!cat) {
-    return { title: `Section — ${brand.name}`, robots: { index: false } };
+    return { title: `Section - ${brand.name}`, robots: { index: false } };
   }
-  const title = `${cat.name} News & Features — ${brand.name}`;
+  const title = `${cat.name} News & Features - ${brand.name}`;
   const description = `Latest ${cat.name.toLowerCase()} reporting, analysis and features from ${brand.name}.`;
   return {
     title,

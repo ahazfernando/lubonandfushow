@@ -53,33 +53,35 @@ export const heroImage = "/images/home-hero.png";
 export const trendingNow = [
   {
     title: "10 Smart Investment Ideas for 2025",
+    description:
+      "Practical ways to grow wealth this year, from property and shares to beginner strategies.",
     href: "/category/finance",
     image:
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=200&q=80",
   },
   {
     title: "How to Start a Business with Low Capital",
+    description:
+      "A simple guide to launching a small business with limited funds, tools and first steps.",
     href: "/category/entrepreneurship",
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=200&q=80",
   },
   {
     title: "The Best Street Food Cities in the World",
+    description:
+      "A flavour-packed tour of cities where street food thrives, from night markets to classics.",
     href: "/category/food-health",
     image:
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80",
   },
   {
     title: "Luxury Furniture Trends for Modern Homes",
+    description:
+      "The pieces and palettes defining luxury interiors this year, plus how to get the look.",
     href: "/category/furniture",
     image:
       "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=200&q=80",
-  },
-  {
-    title: "Must-Watch Movies & Shows This Month",
-    href: "/category/entertainment",
-    image:
-      "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=200&q=80",
   },
 ];
 
@@ -146,7 +148,7 @@ export const shopBanners = [
   },
   {
     id: "clothing",
-    href: "/shop?category=clothing",
+    href: "/shop",
     image:
       "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=1200&q=80",
     titleKey: "shopClothingTitle" as const,

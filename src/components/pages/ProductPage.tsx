@@ -102,7 +102,7 @@ export function ProductPage({ product }: { product: Product }) {
                   type="button"
                   onClick={() => setActiveImage(src)}
                   className={cn(
-                    "aspect-square overflow-hidden rounded-xl border bg-muted/40",
+                    "aspect-square overflow-hidden rounded-xl border bg-black",
                     activeImage === src ? "border-foreground" : "border-transparent",
                   )}
                 >
@@ -110,7 +110,7 @@ export function ProductPage({ product }: { product: Product }) {
                 </button>
               ))}
             </div>
-            <div className="min-w-0 flex-1 overflow-hidden rounded-2xl bg-muted/40">
+            <div className="min-w-0 flex-1 overflow-hidden rounded-2xl bg-black">
               <img
                 src={activeImage}
                 alt={product.name}
@@ -150,7 +150,10 @@ export function ProductPage({ product }: { product: Product }) {
                       key={swatch.id}
                       type="button"
                       aria-label={swatch.name}
-                      onClick={() => setColor(swatch.id)}
+                      onClick={() => {
+                        setColor(swatch.id);
+                        if (swatch.image) setActiveImage(swatch.image);
+                      }}
                       className={cn(
                         "size-7 rounded-full border-2",
                         color === swatch.id ? "border-foreground" : "border-transparent",

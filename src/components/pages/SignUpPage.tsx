@@ -23,7 +23,9 @@ export function SignUpPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,12 +39,16 @@ export function SignUpPage() {
     e.preventDefault();
     setError("");
 
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !password || !confirmPassword) {
       setError(t.auth.errorMissingFields);
       return;
     }
     if (password.length < 8) {
       setError(t.auth.errorWeakPassword);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError(t.auth.errorPasswordMismatch);
       return;
     }
     if (!configured) {
@@ -164,6 +170,30 @@ export function SignUpPage() {
               </button>
             </div>
             <p className="mt-2 text-xs text-white/40">{t.auth.passwordHint}</p>
+          </div>
+
+          <div>
+            <AuthLabel htmlFor="confirmPassword">{t.auth.confirmPassword}</AuthLabel>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder={t.auth.confirmPasswordPlaceholder}
+                className={authFieldClassName("pr-11")}
+                disabled={busy}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 grid w-11 place-items-center text-white/40 hover:text-white/80"
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                aria-label={showConfirmPassword ? t.auth.hidePassword : t.auth.showPassword}
+              >
+                {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
           </div>
 
           {error ? <p className="text-sm text-red-400">{error}</p> : null}

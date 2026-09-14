@@ -1,6 +1,6 @@
 "use client";
 
-import { Instagram, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -11,6 +11,7 @@ import { useI18n } from "./LanguageProvider";
 import { brand } from "@/lib/brand";
 
 const socials = [
+  { label: "Facebook", icon: Facebook },
   { label: "X", icon: XIcon },
   { label: "LinkedIn", icon: Linkedin },
   { label: "Instagram", icon: Instagram },

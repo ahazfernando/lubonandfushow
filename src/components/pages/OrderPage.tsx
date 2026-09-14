@@ -34,7 +34,7 @@ export function OrderPage() {
       from: "Desmond Vale",
       text: "County filed the abstraction figures this morning. I'll put the households in the lede, not the megawatts.",
     },
-    { from: "You", text: "Yes — and name the operator on the record if they'll sit." },
+    { from: "You", text: "Yes - and name the operator on the record if they'll sit." },
   ]);
   const [msg, setMsg] = useState("");
   const active = orders[0]!;

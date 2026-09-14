@@ -47,7 +47,7 @@ export const seedCoupons: Coupon[] = [
     title: "Weeknight table for two",
     merchant: "Salt & Fire Kitchen",
     description:
-      "Prix-fixe dinner for two, Tuesday to Thursday. Book ahead — walk-ins after 9pm only.",
+      "Prix-fixe dinner for two, Tuesday to Thursday. Book ahead - walk-ins after 9pm only.",
     code: "FIRE20",
     discount: "20% OFF",
     category: "Dining",

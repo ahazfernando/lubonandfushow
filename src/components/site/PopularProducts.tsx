@@ -34,7 +34,7 @@ export function PopularProducts() {
           {items.map((product) => (
             <CarouselItem
               key={product.id}
-              className="pl-4 basis-[78%] sm:basis-[46%] md:basis-[32%] lg:basis-[24%] xl:basis-[16.66%]"
+              className="pl-4 basis-[78%] sm:basis-[46%] md:basis-[32%] lg:basis-[20%] xl:basis-[20%]"
             >
               <ProductCard product={product} />
             </CarouselItem>

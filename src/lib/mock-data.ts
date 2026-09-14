@@ -105,7 +105,7 @@ Three separate reviews reached similar conclusions, and each recommended slowing
 
 Regulators have opened a preliminary inquiry. Their report is expected before the end of the quarter, and the questions it asks will matter far beyond one balance sheet.
 
-For now, the numbers are being recalculated by hand — a reminder that the most advanced systems still fail in the oldest ways.`;
+For now, the numbers are being recalculated by hand - a reminder that the most advanced systems still fail in the oldest ways.`;
 
 export const articles: Article[] = [
   {
@@ -146,7 +146,7 @@ export const articles: Article[] = [
     title: "The Notebook Economy: Why the Real Decisions Still Happen on Paper",
     slug: "the-notebook-economy",
     excerpt:
-      "The laptop stays open. The numbers that matter are being written by hand — in rooms with no slides.",
+      "The laptop stays open. The numbers that matter are being written by hand - in rooms with no slides.",
     content: body,
     image: "/images/30a337f3f4912da1687cef8b63c17fca.jpg",
     category: "Business",
@@ -225,7 +225,7 @@ export const articles: Article[] = [
     title: "The Sofa Studio: Independent Brands Designed After Hours",
     slug: "the-sofa-studio",
     excerpt:
-      "A laptop, a late sitting and a product that still has to look expensive. The next consumer labels are being designed from home — and the craft is catching up.",
+      "A laptop, a late sitting and a product that still has to look expensive. The next consumer labels are being designed from home - and the craft is catching up.",
     content: body,
     image: "/order/29c93b7496b86ac14c1fb035e2b2933b.jpg",
     category: "Technology",
@@ -241,7 +241,7 @@ export const articles: Article[] = [
     title: "The Quiet Rewrite: How Recommendation Engines Learned to Wait",
     slug: "the-quiet-rewrite",
     excerpt:
-      "A new generation of ranking systems is optimising for patience — and reshaping what a homepage means.",
+      "A new generation of ranking systems is optimising for patience - and reshaping what a homepage means.",
     content: body,
     image: "/order/f238b898e4b4606c3e4c43de8a211d4d.jpg",
     category: "Technology",
@@ -289,7 +289,7 @@ export const articles: Article[] = [
     id: "8",
     title: "Submitted: What the Data Centre Boom Costs a Water Table",
     slug: "data-centre-water-table",
-    excerpt: "Filed for editorial review — reporting from three counties.",
+    excerpt: "Filed for editorial review - reporting from three counties.",
     content: body,
     image: techDesk.src,
     category: "Technology",
@@ -370,7 +370,7 @@ export const commentThread: Comment[] = [
         author: "Mara Oyelaran",
         initials: "MO",
         createdAt: "1 day ago",
-        content: "Thank you — the source documents are being prepared for publication this week.",
+        content: "Thank you - the source documents are being prepared for publication this week.",
       },
     ],
   },
@@ -441,7 +441,7 @@ export const pricingTiers = [
     words: 800,
     turnaround: "5 days",
     price: 240,
-    blurb: "A reported take from the desk — tight, sourced, and ready to run.",
+    blurb: "A reported take from the desk - tight, sourced, and ready to run.",
     perks: ["Assigned reporter", "Headline + standfirst", "One desk revision"],
   },
   {

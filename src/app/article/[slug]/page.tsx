@@ -17,10 +17,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = articleBySlug(slug);
   if (!article) {
-    return { title: `Story unavailable — ${brand.name}`, robots: { index: false } };
+    return { title: `Story unavailable - ${brand.name}`, robots: { index: false } };
   }
   return {
-    title: `${article.metaTitle ?? article.title} — ${brand.name}`,
+    title: `${article.metaTitle ?? article.title} - ${brand.name}`,
     description: article.metaDescription ?? article.excerpt,
     openGraph: {
       title: article.title,

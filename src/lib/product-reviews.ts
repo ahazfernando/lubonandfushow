@@ -15,7 +15,7 @@ export const shopReviews: ProductReview[] = [
     id: "rev-jessica",
     name: "Jessica F.",
     rating: 5,
-    body: "I bought this for my boyfriend and he loves it. The material feels soft but durable, and the fit is just right — not too tight, not too loose. Works great for casual Fridays or dinner dates.",
+    body: "I bought this for my boyfriend and he loves it. The material feels soft but durable, and the fit is just right - not too tight, not too loose. Works great for casual Fridays or dinner dates.",
   },
   {
     id: "rev-brody",
@@ -33,7 +33,7 @@ export const shopReviews: ProductReview[] = [
     id: "rev-marcus",
     name: "Marcus T.",
     rating: 5,
-    body: "Arrived quickly and packed well. Finish is cleaner than I expected at this price — I have already ordered a second one.",
+    body: "Arrived quickly and packed well. Finish is cleaner than I expected at this price - I have already ordered a second one.",
   },
   {
     id: "rev-priya",
@@ -63,7 +63,7 @@ export const shopFaqs: ProductFaq[] = [
   {
     question: "Do you ship internationally?",
     answer:
-      "We currently ship within Australia. International delivery is on the way — join the list in the footer to hear first.",
+      "We currently ship within Australia. International delivery is on the way - join the list in the footer to hear first.",
   },
   {
     question: "How do I choose a size?",

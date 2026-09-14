@@ -4,7 +4,7 @@ import { SearchPage } from "@/components/pages/SearchPage";
 import { brand, brandOpenGraphImages } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: `Search the Archive — ${brand.name}`,
+  title: `Search the Archive - ${brand.name}`,
   description: `Full-text search across ${brand.name} reporting, filtered by section, author and date.`,
   openGraph: {
     title: `Search the ${brand.name} Archive`,

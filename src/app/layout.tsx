@@ -10,7 +10,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Pressroom — Independent Daily",
+    default: "Pressroom - Independent Daily",
     template: "%s",
   },
   description:

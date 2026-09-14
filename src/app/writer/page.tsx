@@ -4,7 +4,7 @@ import { WriterPage } from "@/components/pages/WriterPage";
 import { brand, brandOpenGraphImages } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: `Write for ${brand.name} — Contributor Dashboard`,
+  title: `Write for ${brand.name} - Contributor Dashboard`,
   description:
     `Apply to write for ${brand.name}, draft in Markdown with live preview, submit for editorial review and read editor feedback.`,
   openGraph: {

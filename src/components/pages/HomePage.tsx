@@ -85,7 +85,7 @@ export function HomePage() {
                   {t.home.heroTitle}
                   <br />
                   <span className="text-white/95">{t.home.heroLive}</span>{" "}
-                  <span className="text-primary">{t.home.heroBetter}</span>
+                  <span className="text-white">{t.home.heroBetter}</span>
                 </h1>
                 <p className="mt-5 max-w-[28ch] text-[15px] leading-relaxed text-white/82 md:text-base">
                   {t.home.heroBody}
@@ -102,7 +102,6 @@ export function HomePage() {
 
             <p className="hero-script hero-animate-script pointer-events-none absolute right-[8%] bottom-24 z-10 hidden max-w-[250px] rotate-[-10deg] text-[2rem] text-white/95 md:block lg:right-[10%] lg:bottom-28 lg:text-[2.35rem]">
               {t.home.heroScript}
-              <span className="absolute -bottom-1 left-3 right-8 h-[2px] rounded-full bg-primary" />
             </p>
 
             <p className="absolute bottom-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-black/25 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm md:left-auto md:right-5">
@@ -131,8 +130,8 @@ export function HomePage() {
                 </Link>
               </div>
 
-              <ol className="flex flex-1 flex-col justify-between gap-1">
-                {trendingNow.map((item, i) => (
+              <ol className="flex flex-1 flex-col justify-evenly">
+                {trendingNow.slice(0, 4).map((item, i) => (
                   <li
                     key={item.title}
                     className="hero-animate-trend border-b border-white/[0.08] last:border-b-0"
@@ -140,20 +139,25 @@ export function HomePage() {
                   >
                     <Link
                       href={item.href}
-                      className="group flex items-center gap-3 py-3 transition-colors hover:bg-white/[0.03]"
+                      className="group flex items-start gap-3 py-4 transition-colors hover:bg-white/[0.03]"
                     >
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground transition-transform duration-300 group-hover:scale-105">
+                      <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground transition-transform duration-300 group-hover:scale-105">
                         {i + 1}
                       </span>
-                      <span className="min-w-0 flex-1 text-sm font-semibold leading-snug text-white/92 transition-colors group-hover:text-white">
-                        {item.title}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-semibold leading-snug text-white/92 transition-colors group-hover:text-white">
+                          {item.title}
+                        </span>
+                        <span className="mt-1.5 block text-[13px] leading-snug text-white/60">
+                          {item.description}
+                        </span>
                       </span>
                       <img
                         src={item.image}
                         alt=""
                         width={56}
                         height={56}
-                        className="size-12 shrink-0 rounded-lg object-cover ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-[1.04]"
+                        className="mt-0.5 size-12 shrink-0 rounded-lg object-cover ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-[1.04]"
                       />
                     </Link>
                   </li>

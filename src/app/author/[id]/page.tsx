@@ -17,9 +17,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const author = authors.find((item) => item.id === id);
   if (!author) {
-    return { title: `Author — ${brand.name}`, robots: { index: false } };
+    return { title: `Author - ${brand.name}`, robots: { index: false } };
   }
-  const title = `${author.name} — ${brand.name}`;
+  const title = `${author.name} - ${brand.name}`;
   return {
     title,
     description: author.bio,
