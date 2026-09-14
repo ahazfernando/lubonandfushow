@@ -238,11 +238,22 @@ export function ShopPage() {
 
   return (
     <SiteLayout>
-      <div className="w-full border-b border-border bg-ink py-14 text-ink-foreground">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
-          <p className="text-primary kicker">{t.shop.kicker}</p>
-          <h1 className="mt-2 text-4xl md:text-5xl">{t.shop.title}</h1>
-          <p className="mt-3 max-w-2xl opacity-70">{t.shop.subtitle}</p>
+      <div className="relative isolate w-full overflow-hidden border-b border-border">
+        <img
+          src="/images/ShopHeroSection.png"
+          alt=""
+          width={1920}
+          height={640}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="relative mx-auto flex min-h-[220px] max-w-[1600px] items-end px-4 py-14 text-white sm:min-h-[260px] sm:px-6 md:min-h-[300px] lg:px-8 lg:py-16">
+          <div>
+            <p className="text-primary kicker">{t.shop.kicker}</p>
+            <h1 className="mt-2 text-5xl font-semibold tracking-tight md:text-6xl lg:text-7xl">
+              {t.shop.title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-white/90 drop-shadow-sm">{t.shop.subtitle}</p>
+          </div>
         </div>
       </div>
 

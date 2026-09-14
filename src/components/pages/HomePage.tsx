@@ -81,7 +81,7 @@ export function HomePage() {
                 <p className="text-[11px] font-semibold tracking-[0.34em] text-white/80 uppercase">
                   {t.home.heroKicker}
                 </p>
-                <h1 className="mt-4 max-w-[11ch] text-[3.35rem] leading-[0.88] tracking-[-0.03em] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+                <h1 className="mt-4 max-w-[11ch] text-[3.75rem] leading-[0.88] tracking-[-0.03em] text-white sm:text-7xl md:text-8xl lg:text-[6.5rem]">
                   {t.home.heroTitle}
                   <br />
                   <span className="text-white/95">{t.home.heroLive}</span>{" "}
@@ -280,7 +280,7 @@ export function HomePage() {
       <PopularProducts />
 
       {(couponsLoading || featuredCoupons.length > 0) && (
-        <section className="mx-auto max-w-7xl px-4 py-14">
+        <section className="mx-auto max-w-[1400px] px-4 py-14">
           <SectionHeading
             title={t.home.couponsTitle}
             action={
@@ -300,7 +300,7 @@ export function HomePage() {
         </section>
       )}
 
-      <section className="mx-auto max-w-7xl px-4 py-14">
+      <section className="mx-auto max-w-[1400px] px-4 py-14">
         <div className="card-press grid items-center gap-8 p-8 md:grid-cols-[1.4fr_1fr] md:p-12">
           <div>
             <p className="text-primary kicker">{t.home.ctaKicker}</p>

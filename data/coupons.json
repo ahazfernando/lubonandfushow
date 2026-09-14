@@ -40,12 +40,28 @@
     "discount": "Rs. 1,000 OFF",
     "category": "Tech",
     "image": "/images/30a337f3f4912da1687cef8b63c17fca.jpg",
-    "expiresAt": "2026-09-12",
+    "expiresAt": "2026-12-31",
     "terms": "One use per reader. Cannot be exchanged for cash.",
     "url": "",
     "featured": true,
     "active": true,
     "createdAt": "2026-08-08T09:00:00.000Z"
+  },
+  {
+    "id": "cp-shopping-01",
+    "title": "Weekend home edit",
+    "merchant": "Studio Lane Market",
+    "description": "15% off furniture and decor when you spend over $200. Online and in-store.",
+    "code": "LANE15",
+    "discount": "15% OFF",
+    "category": "Shopping",
+    "image": "/images/HomeHeroSectionHero.jpeg",
+    "expiresAt": "2026-11-30",
+    "terms": "Minimum spend $200. Excludes clearance and gift cards.",
+    "url": "",
+    "featured": true,
+    "active": true,
+    "createdAt": "2026-09-14T09:00:00.000Z"
   },
   {
     "id": "cp-wellness-01",
@@ -62,5 +78,21 @@
     "featured": false,
     "active": true,
     "createdAt": "2026-08-05T09:00:00.000Z"
+  },
+  {
+    "id": "cp-entertainment-01",
+    "title": "Two-for-one cinema night",
+    "merchant": "Harbour Lights Cinema",
+    "description": "Buy one ticket, get one free on weekday evening shows. Seats subject to availability.",
+    "code": "LIGHTS2",
+    "discount": "2 FOR 1",
+    "category": "Entertainment",
+    "image": "/images/752b89637641ef17c9b023b064ecef2b.jpg_2K_20260914110122.jpeg",
+    "expiresAt": "2026-12-15",
+    "terms": "Weekdays only. Lowest-priced ticket free. Not valid on premieres.",
+    "url": "",
+    "featured": true,
+    "active": true,
+    "createdAt": "2026-09-14T11:00:00.000Z"
   }
 ]

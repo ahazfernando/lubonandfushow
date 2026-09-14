@@ -37,6 +37,17 @@ async function writeDisk(items: Coupon[]) {
 
 export async function listCoupons(): Promise<Coupon[]> {
   const mem = memory();
+
+  // In local/dev, always re-read disk so edits to data/coupons.json show up
+  // without restarting the server.
+  if (process.env.NODE_ENV === "development") {
+    const fromDisk = await readDisk();
+    if (fromDisk) {
+      mem.items = fromDisk;
+      return mem.items;
+    }
+  }
+
   if (mem.items) return mem.items;
   const fromDisk = await readDisk();
   mem.items = fromDisk ?? seedCoupons.map((c) => ({ ...c }));

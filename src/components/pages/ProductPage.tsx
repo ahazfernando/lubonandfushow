@@ -78,7 +78,7 @@ export function ProductPage({ product }: { product: Product }) {
 
   return (
     <SiteLayout>
-      <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
+      <div className="mx-auto max-w-[1400px] px-4 py-8 md:py-10">
         <nav className="mb-6 text-sm text-muted-foreground">
           <Link href="/" className="hover:text-foreground">
             {t.nav.home}
@@ -102,15 +102,15 @@ export function ProductPage({ product }: { product: Product }) {
                   type="button"
                   onClick={() => setActiveImage(src)}
                   className={cn(
-                    "aspect-square overflow-hidden rounded-xl border bg-black",
-                    activeImage === src ? "border-foreground" : "border-transparent",
+                    "aspect-square overflow-hidden rounded-xl border bg-white",
+                    activeImage === src ? "border-foreground" : "border-border",
                   )}
                 >
                   <img src={src} alt="" className="size-full object-contain p-1" />
                 </button>
               ))}
             </div>
-            <div className="min-w-0 flex-1 overflow-hidden rounded-2xl bg-black">
+            <div className="min-w-0 flex-1 overflow-hidden rounded-2xl border border-border bg-white">
               <img
                 src={activeImage}
                 alt={product.name}

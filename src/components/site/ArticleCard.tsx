@@ -9,7 +9,7 @@ import { authorById, readingTime, type Article } from "@/lib/mock-data";
 export function CategoryTag({ name }: { name: string }) {
   const { categoryName } = useI18n();
   return (
-    <span className="bg-primary px-2 py-1 text-primary-foreground kicker">
+    <span className="inline-flex w-fit bg-primary px-2 py-1 text-primary-foreground kicker">
       {categoryName(name)}
     </span>
   );

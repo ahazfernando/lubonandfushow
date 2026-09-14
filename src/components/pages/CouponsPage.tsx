@@ -25,15 +25,26 @@ export function CouponsPage() {
 
   return (
     <SiteLayout>
-      <div className="border-b border-border bg-ink py-14 text-ink-foreground">
-        <div className="mx-auto max-w-7xl px-4">
-          <p className="text-primary kicker">{t.coupons.kicker}</p>
-          <h1 className="mt-2 text-4xl md:text-5xl">{t.coupons.title}</h1>
-          <p className="mt-3 max-w-2xl opacity-70">{t.coupons.subtitle}</p>
+      <div className="relative isolate w-full overflow-hidden border-b border-border">
+        <img
+          src="/images/752b89637641ef17c9b023b064ecef2b.jpg_2K_20260914110122.jpeg"
+          alt=""
+          width={1920}
+          height={640}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="relative mx-auto flex min-h-[220px] max-w-[1400px] items-end px-4 py-14 text-white sm:min-h-[260px] md:min-h-[300px] md:py-16">
+          <div>
+            <p className="text-primary kicker">{t.coupons.kicker}</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+              {t.coupons.title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-white/90 drop-shadow-sm">{t.coupons.subtitle}</p>
+          </div>
         </div>
       </div>
 
-      <section className="mx-auto max-w-7xl px-4 py-14">
+      <section className="mx-auto max-w-[1400px] px-4 py-14">
         <SectionHeading
           title={t.coupons.latest}
           action={
