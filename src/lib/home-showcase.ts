@@ -48,7 +48,7 @@ export const categoryIcons: { id: CategoryIconId; name: string; href: string }[]
   { id: "shop", name: "Shop", href: "/shop" },
 ];
 
-export const heroImage = "/images/home-hero.png";
+export const heroImage = "/images/HomeHeroSectionHero.jpeg";
 
 export const trendingNow = [
   {

@@ -76,7 +76,7 @@ export function HomePage() {
             <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(0,0,0,0.78)_0%,rgba(0,0,0,0.42)_42%,rgba(0,0,0,0.12)_68%,rgba(0,0,0,0.28)_100%)]" />
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent" />
 
-            <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-center px-5 py-12 md:min-h-[540px] md:px-10 lg:min-h-[620px] lg:px-14 xl:px-16">
+            <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-end px-5 pb-16 pt-12 md:min-h-[540px] md:px-10 md:pb-20 lg:min-h-[620px] lg:px-14 lg:pb-24 xl:px-16">
               <div className="hero-animate-copy max-w-2xl">
                 <p className="text-[11px] font-semibold tracking-[0.34em] text-white/80 uppercase">
                   {t.home.heroKicker}
@@ -92,17 +92,21 @@ export function HomePage() {
                 </p>
               </div>
 
-              <Link href="#featured-stories" className="hero-animate-cta mt-8 inline-flex w-fit">
-                <span className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground shadow-[0_18px_40px_-18px_rgba(220,38,38,0.85)] transition-[transform,box-shadow] duration-300 hover:scale-[1.03] hover:shadow-[0_22px_44px_-16px_rgba(220,38,38,0.95)]">
-                  {t.home.heroCta}
-                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                </span>
-              </Link>
+              <div className="hero-animate-cta mt-8 flex flex-wrap items-center gap-3">
+                <Link href="/shop" className="inline-flex w-fit">
+                  <span className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground shadow-[0_18px_40px_-18px_rgba(220,38,38,0.85)] transition-[transform,box-shadow] duration-300 hover:scale-[1.03] hover:shadow-[0_22px_44px_-16px_rgba(220,38,38,0.95)]">
+                    {t.home.heroCta}
+                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+                <Link href="/login/staff?next=%2Fwriter" className="inline-flex w-fit">
+                  <span className="group inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-[transform,background-color,border-color] duration-300 hover:scale-[1.03] hover:border-white/55 hover:bg-white/18">
+                    {t.home.heroWriterCta}
+                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </div>
             </div>
-
-            <p className="hero-script hero-animate-script pointer-events-none absolute right-[8%] bottom-24 z-10 hidden max-w-[250px] rotate-[-10deg] text-[2rem] text-white/95 md:block lg:right-[10%] lg:bottom-28 lg:text-[2.35rem]">
-              {t.home.heroScript}
-            </p>
 
             <p className="absolute bottom-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-black/25 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm md:left-auto md:right-5">
               <MapPin className="size-3.5 text-primary" />
@@ -308,7 +312,7 @@ export function HomePage() {
                   {t.home.seePricing}
                 </Button>
               </Link>
-              <Link href="/writer">
+              <Link href="/login/staff?next=%2Fwriter">
                 <Button variant="outline" className={`rounded-sm font-semibold ${caseClass}`}>
                   {t.home.writeForUs}
                 </Button>

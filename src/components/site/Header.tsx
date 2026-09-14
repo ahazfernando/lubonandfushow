@@ -25,18 +25,26 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { t, categoryName, locale } = useI18n();
-  const { user, signOut } = useAuth();
+  const { user, isStaff, signOut } = useAuth();
   const { count } = useCart();
   const caseClass = locale === "si" ? "tracking-wide" : "uppercase tracking-wide";
   const shopActive = pathname === "/shop" || pathname.startsWith("/shop/");
 
   const nav = [
-    { label: t.nav.coupons, to: "/coupons" },
-    { label: t.nav.shop, to: "/shop" },
-    { label: t.nav.order, to: "/order" },
-    { label: t.nav.search, to: "/search" },
-    { label: t.nav.newsroom, to: "/admin" },
-    { label: t.nav.writers, to: "/writer" },
+    { label: t.nav.coupons, to: "/coupons", match: "/coupons" },
+    { label: t.nav.shop, to: "/shop", match: "/shop" },
+    { label: t.nav.order, to: "/order", match: "/order" },
+    { label: t.nav.search, to: "/search", match: "/search" },
+    {
+      label: t.nav.newsroom,
+      to: isStaff ? "/admin" : "/login/staff?next=%2Fadmin",
+      match: "/admin",
+    },
+    {
+      label: t.nav.writers,
+      to: isStaff ? "/writer" : "/login/staff?next=%2Fwriter",
+      match: "/writer",
+    },
   ];
 
   return (
@@ -53,10 +61,10 @@ export function Header() {
         <nav className="hidden items-center gap-6 lg:flex">
           {nav.map((n) => (
             <Link
-              key={n.to}
+              key={n.match}
               href={n.to}
               className={`text-sm font-semibold ${caseClass} transition-colors hover:text-primary ${
-                pathname === n.to || pathname.startsWith(`${n.to}/`)
+                pathname === n.match || pathname.startsWith(`${n.match}/`)
                   ? "text-primary"
                   : "text-foreground/80"
               }`}
@@ -171,7 +179,7 @@ export function Header() {
         <div className="border-t border-border bg-card px-4 py-3 lg:hidden">
           {nav.map((n) => (
             <Link
-              key={n.to}
+              key={n.match}
               href={n.to}
               onClick={() => setOpen(false)}
               className={`block py-2 text-sm font-semibold ${caseClass}`}
@@ -199,24 +207,44 @@ export function Header() {
             <ThemeToggle />
           </div>
           {user ? (
-            <button
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                void signOut();
-              }}
-              className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
-            >
-              {t.nav.signOut}
-            </button>
+            <>
+              {isStaff ? (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
+                >
+                  {t.nav.dashboard}
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  void signOut();
+                }}
+                className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
+              >
+                {t.nav.signOut}
+              </button>
+            </>
           ) : (
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
-            >
-              {t.nav.signIn}
-            </Link>
+            <>
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
+              >
+                {t.nav.signIn}
+              </Link>
+              <Link
+                href="/login/staff"
+                onClick={() => setOpen(false)}
+                className={`mt-1 block py-2 text-sm font-semibold ${caseClass}`}
+              >
+                {t.nav.staffSignIn}
+              </Link>
+            </>
           )}
         </div>
       )}

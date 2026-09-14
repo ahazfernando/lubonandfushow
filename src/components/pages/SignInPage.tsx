@@ -12,13 +12,16 @@ import { useAuth } from "@/components/site/AuthProvider";
 import { useI18n } from "@/components/site/LanguageProvider";
 import { authErrorMessage, safeNextPath } from "@/lib/auth-errors";
 
-export function SignInPage() {
+type SignInVariant = "customer" | "staff";
+
+export function SignInPage({ variant = "customer" }: { variant?: SignInVariant }) {
   const { t } = useI18n();
-  const { user, loading: authLoading, configured, signIn, signInWithGoogle, resetPassword } =
+  const { user, loading: authLoading, configured, isStaff, signIn, signInWithGoogle, resetPassword } =
     useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = safeNextPath(searchParams.get("next"));
+  const next = safeNextPath(searchParams.get("next"), { audience: variant });
+  const isStaffLogin = variant === "staff";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,8 +30,13 @@ export function SignInPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!authLoading && user) router.replace(next);
-  }, [authLoading, user, router, next]);
+    if (authLoading || !user) return;
+    if (isStaffLogin) {
+      router.replace(isStaff ? next : "/dashboard");
+      return;
+    }
+    router.replace(next);
+  }, [authLoading, user, router, next, isStaffLogin, isStaff]);
 
   const busy = submitting;
 
@@ -93,12 +101,15 @@ export function SignInPage() {
     }
   }
 
+  const title = isStaffLogin ? t.auth.staffWelcome : t.auth.welcomeBack;
+  const body = isStaffLogin ? t.auth.staffWelcomeBody : t.auth.welcomeBackBody;
+  const heading = isStaffLogin ? t.auth.staffSignInTitle : t.auth.signInTitle;
+  const subtitle = isStaffLogin ? t.auth.staffSignInSubtitle : t.auth.signInSubtitle;
+
   return (
-    <AuthShell title={t.auth.welcomeBack} body={t.auth.welcomeBackBody}>
-      <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
-        {t.auth.signInTitle}
-      </h2>
-      <p className="mt-2 text-sm text-white/45">{t.auth.signInSubtitle}</p>
+    <AuthShell title={title} body={body}>
+      <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">{heading}</h2>
+      <p className="mt-2 text-sm text-white/45">{subtitle}</p>
 
       <div className="mt-8 space-y-6">
         <SocialAuthButtons
@@ -168,12 +179,32 @@ export function SignInPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-white/45">
-          {t.auth.noAccount}{" "}
-          <Link href={`/register?next=${encodeURIComponent(next)}`} className="font-semibold text-white">
-            {t.auth.signUp}
-          </Link>
-        </p>
+        {isStaffLogin ? (
+          <p className="text-center text-sm text-white/45">
+            {t.auth.customerInstead}{" "}
+            <Link href="/login" className="font-semibold text-white">
+              {t.auth.customerSignIn}
+            </Link>
+          </p>
+        ) : (
+          <>
+            <p className="text-center text-sm text-white/45">
+              {t.auth.noAccount}{" "}
+              <Link
+                href={`/register?next=${encodeURIComponent(next)}`}
+                className="font-semibold text-white"
+              >
+                {t.auth.signUp}
+              </Link>
+            </p>
+            <p className="text-center text-sm text-white/45">
+              {t.auth.staffInstead}{" "}
+              <Link href="/login/staff" className="font-semibold text-white">
+                {t.auth.staffSignIn}
+              </Link>
+            </p>
+          </>
+        )}
       </div>
     </AuthShell>
   );

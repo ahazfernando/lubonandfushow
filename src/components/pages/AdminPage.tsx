@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BarChart3, Check, Eye, LogOut, MessageSquare, X } from "lucide-react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { AuthShell } from "@/components/auth/AuthShell";
-import { AdminLoginForm } from "@/components/site/AdminLoginForm";
 import { ArticleEditor } from "@/components/site/ArticleEditor";
 import { CouponManager } from "@/components/site/CouponManager";
 import { useAuth } from "@/components/site/AuthProvider";
@@ -29,19 +31,23 @@ export function AdminPage() {
   const totalViews = articles.reduce((s, a) => s + a.views, 0);
   const { t, msg, formatDate, formatNumber, categoryName, locale } = useI18n();
   const { user, loading, isAdmin, signOut } = useAuth();
+  const router = useRouter();
   const caseClass = locale === "si" ? "" : "uppercase";
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login/staff?next=%2Fadmin");
+    }
+  }, [loading, user, router]);
 
   async function handleSignOut() {
     await signOut();
     toast.success(t.nav.signOut);
+    router.replace("/login/staff");
   }
 
-  if (loading) {
+  if (loading || !user) {
     return <PageSkeleton variant="auth" />;
-  }
-
-  if (!user) {
-    return <AdminLoginForm />;
   }
 
   if (!isAdmin) {
@@ -51,13 +57,18 @@ export function AdminPage() {
           {t.admin.accessDeniedTitle}
         </h2>
         <p className="mt-2 text-sm text-white/45">{t.admin.accessDeniedBody}</p>
-        <button
-          type="button"
-          onClick={() => void handleSignOut()}
-          className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-bold tracking-wide text-black transition-opacity hover:opacity-90"
-        >
-          <LogOut className="size-4" /> {t.nav.signOut}
-        </button>
+        <div className="mt-8 space-y-3">
+          <Button asChild className="h-12 w-full rounded-xl bg-white text-black hover:bg-white/90">
+            <Link href="/dashboard">{t.dashboard.title}</Link>
+          </Button>
+          <button
+            type="button"
+            onClick={() => void handleSignOut()}
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/20 text-sm font-bold tracking-wide text-white transition-opacity hover:opacity-90"
+          >
+            <LogOut className="size-4" /> {t.nav.signOut}
+          </button>
+        </div>
       </AuthShell>
     );
   }

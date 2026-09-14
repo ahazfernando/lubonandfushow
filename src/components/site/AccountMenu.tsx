@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, Newspaper, PenLine } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -25,7 +25,7 @@ function initials(name: string) {
 }
 
 export function AccountMenu() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, isAdmin, isWriter, isStaff, signOut } = useAuth();
   const { t } = useI18n();
 
   if (loading) {
@@ -34,9 +34,14 @@ export function AccountMenu() {
 
   if (!user) {
     return (
-      <Link href="/login" className="hidden shrink-0 text-sm font-semibold sm:block">
-        {t.nav.signIn}
-      </Link>
+      <div className="hidden items-center gap-3 sm:flex">
+        <Link href="/login" className="shrink-0 text-sm font-semibold">
+          {t.nav.signIn}
+        </Link>
+        <Link href="/login/staff" className="shrink-0 text-sm font-semibold text-muted-foreground hover:text-foreground">
+          {t.nav.staffSignIn}
+        </Link>
+      </div>
     );
   }
 
@@ -65,6 +70,33 @@ export function AccountMenu() {
           {user.email ? <p className="truncate text-xs text-muted-foreground">{user.email}</p> : null}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {isStaff ? (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard">
+                <LayoutDashboard className="size-4" />
+                {t.nav.dashboard}
+              </Link>
+            </DropdownMenuItem>
+            {isAdmin ? (
+              <DropdownMenuItem asChild>
+                <Link href="/admin">
+                  <Newspaper className="size-4" />
+                  {t.nav.newsroom}
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
+            {isWriter ? (
+              <DropdownMenuItem asChild>
+                <Link href="/writer">
+                  <PenLine className="size-4" />
+                  {t.nav.writers}
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuSeparator />
+          </>
+        ) : null}
         <DropdownMenuItem
           onClick={() => {
             void signOut();

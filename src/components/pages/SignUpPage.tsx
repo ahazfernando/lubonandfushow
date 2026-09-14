@@ -17,7 +17,7 @@ export function SignUpPage() {
   const { user, loading: authLoading, configured, signUp, signInWithGoogle } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = safeNextPath(searchParams.get("next"));
+  const next = safeNextPath(searchParams.get("next"), { audience: "customer" });
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -211,6 +211,12 @@ export function SignUpPage() {
           {t.auth.alreadyHaveAccount}{" "}
           <Link href={`/login?next=${encodeURIComponent(next)}`} className="font-semibold text-white">
             {t.auth.logIn}
+          </Link>
+        </p>
+        <p className="text-center text-sm text-white/45">
+          {t.auth.staffInstead}{" "}
+          <Link href="/login/staff" className="font-semibold text-white">
+            {t.auth.staffSignIn}
           </Link>
         </p>
       </div>

@@ -2,6 +2,8 @@ import { FirebaseError } from "firebase/app";
 
 import type { Messages } from "@/lib/i18n";
 
+export { isStaffPath, safeNextPath, staffRolesForEmail } from "@/lib/auth-roles";
+
 export function authErrorMessage(error: unknown, t: Messages["auth"]): string {
   const code = error instanceof FirebaseError ? error.code : "";
 
@@ -33,9 +35,4 @@ export function authErrorMessage(error: unknown, t: Messages["auth"]): string {
     default:
       return t.errorGeneric;
   }
-}
-
-export function safeNextPath(value: string | null | undefined) {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
-  return value;
 }

@@ -25,6 +25,7 @@ import {
 } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
+import { staffRolesForEmail } from "@/lib/auth-roles";
 import { getFirebaseAuth, getFirebaseDb, isFirebaseConfigured } from "@/lib/firebase";
 
 type SignUpInput = {
@@ -39,6 +40,8 @@ type AuthContextValue = {
   loading: boolean;
   configured: boolean;
   isAdmin: boolean;
+  isWriter: boolean;
+  isStaff: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (input: SignUpInput) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -150,23 +153,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await firebaseSignOut(getFirebaseAuth());
   }, []);
 
-  const isAdmin = useMemo(() => {
-    const email = user?.email?.trim().toLowerCase();
-    if (!email) return false;
-    const allowlist = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
-      .split(",")
-      .map((value) => value.trim().toLowerCase())
-      .filter(Boolean);
-    if (allowlist.length === 0) return true;
-    return allowlist.includes(email);
-  }, [user]);
+  const roles = useMemo(() => staffRolesForEmail(user?.email), [user]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
       loading,
       configured,
-      isAdmin,
+      isAdmin: roles.isAdmin,
+      isWriter: roles.isWriter,
+      isStaff: roles.isStaff,
       signIn,
       signUp,
       signInWithGoogle,
@@ -177,7 +173,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading,
       configured,
-      isAdmin,
+      roles.isAdmin,
+      roles.isWriter,
+      roles.isStaff,
       signIn,
       signUp,
       signInWithGoogle,

@@ -1,9 +1,16 @@
 "use client";
 
-import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AlertCircle, LogOut } from "lucide-react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
+import { AuthShell } from "@/components/auth/AuthShell";
 import { ArticleEditor } from "@/components/site/ArticleEditor";
+import { useAuth } from "@/components/site/AuthProvider";
+import { useI18n } from "@/components/site/LanguageProvider";
+import { PageSkeleton } from "@/components/site/PageSkeleton";
 import { SectionHeading, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +18,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { articles } from "@/lib/mock-data";
-import { useI18n } from "@/components/site/LanguageProvider";
 
 const mine = articles.filter((a) => a.authorId === "a2");
 
@@ -26,12 +32,54 @@ const feedback = [
 
 export function WriterPage() {
   const { t, formatDate, categoryName, locale, msg } = useI18n();
+  const { user, loading, isWriter, signOut } = useAuth();
+  const router = useRouter();
   const caseClass = locale === "si" ? "" : "uppercase";
   const statusTitle = {
     draft: t.writer.drafts,
     pending_review: t.writer.submitted,
     published: t.writer.published,
   } as const;
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login/staff?next=%2Fwriter");
+    }
+  }, [loading, user, router]);
+
+  async function handleSignOut() {
+    await signOut();
+    toast.success(t.nav.signOut);
+    router.replace("/login/staff");
+  }
+
+  if (loading || !user) {
+    return <PageSkeleton variant="auth" />;
+  }
+
+  if (!isWriter) {
+    return (
+      <AuthShell title={t.writer.accessDeniedTitle} body={t.writer.accessDeniedBody}>
+        <h2 className="font-sans text-3xl font-semibold tracking-tight text-white">
+          {t.writer.accessDeniedTitle}
+        </h2>
+        <p className="mt-2 text-sm text-white/45">{t.writer.accessDeniedBody}</p>
+        <div className="mt-8 space-y-3">
+          <Button asChild className="h-12 w-full rounded-xl bg-white text-black hover:bg-white/90">
+            <Link href="/dashboard">{t.dashboard.title}</Link>
+          </Button>
+          <button
+            type="button"
+            onClick={() => void handleSignOut()}
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/20 text-sm font-bold tracking-wide text-white transition-opacity hover:opacity-90"
+          >
+            <LogOut className="size-4" /> {t.nav.signOut}
+          </button>
+        </div>
+      </AuthShell>
+    );
+  }
+
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden">
