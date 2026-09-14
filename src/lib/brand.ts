@@ -1,6 +1,6 @@
 export const brand = {
   name: "The Liban & Fu Show",
-  logo: "/logo/libanandfushow.png",
+  logo: "/logo/upsideboatfaviconlogo.png",
   navLogo: "/logo/upsideboatd1.png",
   authLogo: "/logo/upsideboat.png",
   footerLogo: "/logo/upsideboat.png",
@@ -10,8 +10,8 @@ export const brandOpenGraphImages = [
   {
     url: brand.logo,
     alt: brand.name,
-    width: 797,
-    height: 372,
+    width: 932,
+    height: 930,
     type: "image/png",
   },
 ];

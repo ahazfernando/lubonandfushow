@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     "Independent reporting, features and commissioned writing from the Pressroom newsroom.",
   authors: [{ name: "Pressroom" }],
   icons: {
-    icon: [{ url: brand.logo, type: "image/png", sizes: "797x372" }],
-    apple: [{ url: brand.logo, type: "image/png" }],
+    icon: [{ url: brand.logo, type: "image/png", sizes: "932x930" }],
+    apple: [{ url: brand.logo, type: "image/png", sizes: "932x930" }],
     shortcut: [{ url: brand.logo, type: "image/png" }],
   },
   openGraph: {
