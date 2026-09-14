@@ -1,7 +1,7 @@
 export const brand = {
   name: "The Liban & Fu Show",
   logo: "/logo/libanandfushow.png",
-  navLogo: "/logo/upsideboatlogomain.png",
+  navLogo: "/logo/upsideboatd1.png",
   authLogo: "/logo/upsideboat.png",
   footerLogo: "/logo/upsideboat.png",
 } as const;

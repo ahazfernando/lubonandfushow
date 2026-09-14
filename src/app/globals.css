@@ -193,6 +193,76 @@
   line-height: 1.05;
 }
 
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-image-zoom {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-trend-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@utility hero-animate-copy {
+  animation: hero-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility hero-animate-cta {
+  animation: hero-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+@utility hero-animate-script {
+  animation: hero-fade-in 0.9s ease 0.35s both;
+}
+
+@utility hero-animate-image {
+  animation: hero-image-zoom 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility hero-animate-trend {
+  animation: hero-trend-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-animate-copy,
+  .hero-animate-cta,
+  .hero-animate-script,
+  .hero-animate-image,
+  .hero-animate-trend {
+    animation: none;
+  }
+}
+
 @utility card-press {
   background-color: var(--color-card);
   border: 1px solid var(--color-border);

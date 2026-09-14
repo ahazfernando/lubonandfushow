@@ -117,8 +117,8 @@ export function PageSkeleton({
 function HomeSkeleton() {
   return (
     <>
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
-        <Skeleton className="min-h-[420px] w-full rounded-none md:min-h-[500px] lg:min-h-[560px]" />
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,32%)] xl:grid-cols-[minmax(0,1fr)_360px]">
+        <Skeleton className="min-h-[460px] w-full rounded-none md:min-h-[540px] lg:min-h-[620px]" />
         <Skeleton className="min-h-[320px] w-full rounded-none" />
       </div>
       <div className="mx-auto flex max-w-[1400px] justify-between gap-4 overflow-hidden px-4 py-10">
